@@ -17,3 +17,16 @@ Logs/
 Temp/
 UserSettings/
 obj/
+
+Assembly-CSharp-firstpass.csproj
+
+CustomToolbar.Editor.csproj
+UniTask.Addressables.csproj
+UniTask.DOTween.csproj
+UniTask.Editor.csproj
+UniTask.Linq.csproj
+UniTask.TextMeshPro.csproj
+UniTask.csproj
+Unity Timer.csproj
+UnityWebSocket.Editor.csproj
+UnityWebSocket.Runtime.csproj
