@@ -30,3 +30,13 @@ UniTask.csproj
 Unity Timer.csproj
 UnityWebSocket.Editor.csproj
 UnityWebSocket.Runtime.csproj
+
+UniFramework.Animation.csproj
+UniFramework.Event.csproj
+UniFramework.Machine.csproj
+UniFramework.Network.csproj
+UniFramework.Pooling.csproj
+UniFramework.Singleton.csproj
+UniFramework.Tween.csproj
+UniFramework.Utility.csproj
+UniFramework.Window.csproj
