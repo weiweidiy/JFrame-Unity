@@ -48,3 +48,16 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+    - GroupName: Main
+      GroupDesc: "\u70ED\u66F4\u5165\u53E3"
+      AssetTags: Main
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Downloads/HotUpdateRes/Main
+        CollectorGUID: 3ab63c7f09bc7894b918c4a1598ec099
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 

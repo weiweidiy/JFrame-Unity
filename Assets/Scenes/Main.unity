@@ -372,5 +372,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 892d380133f78b6449936d21572ba523, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playMode: 2
+  playMode: 0
   hostDomainAddress: https://bigboom2023-1318645715.cos.ap-shanghai.myqcloud.com

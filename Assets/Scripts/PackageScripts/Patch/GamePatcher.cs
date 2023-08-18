@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,8 @@ public class GamePatcher : MonoBehaviour
     {
         //≥ı ºªØYooAssets
         var patchManager = new YooAssetsPatchManager(playMode, hostDomainAddress);
+        patchManager.onPatchComplete += PatchManager_onPatchComplete;
+
         var patchMediator = new PatchMediator(patchManager);
 
         bool result = await patchManager.Initialize();
@@ -30,4 +33,16 @@ public class GamePatcher : MonoBehaviour
         }
     }
 
+    private async void PatchManager_onPatchComplete(bool isSucceed)
+    {
+
+#if !UNITY_EDITOR
+        var dllManager = new DllManager();
+        dllManager.LoadDLL();
+#endif
+
+        var _Handle = YooAssets.LoadAssetAsync<GameObject>("Main");
+        await _Handle.ToUniTask();
+        _Handle.InstantiateSync();
+    }
 }
