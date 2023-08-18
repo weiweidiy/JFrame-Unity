@@ -13,17 +13,38 @@ MonoBehaviour:
   m_Name: AssetBundleCollectorSetting
   m_EditorClassIdentifier: 
   ShowPackageView: 0
-  EnableAddressable: 0
+  EnableAddressable: 1
   LocationToLower: 0
   IncludeAssetGUID: 0
   UniqueBundleName: 0
   ShowEditorAlias: 0
   Packages:
   - PackageName: DefaultPackage
-    PackageDesc: 
+    PackageDesc: "\u9ED8\u8BA4\u5305"
     Groups:
-    - GroupName: Default Group
-      GroupDesc: 
-      AssetTags: 
+    - GroupName: Fonts
+      GroupDesc: "\u5B57\u4F53"
+      AssetTags: Fonts
       ActiveRuleName: EnableGroup
-      Collectors: []
+      Collectors:
+      - CollectPath: Assets/Downloads/HotUpdateRes/Fonts
+        CollectorGUID: 8e7217607da3d254e82c30f7bca64ba0
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Dlls
+      GroupDesc: "\u4EE3\u7801"
+      AssetTags: Dlls
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Downloads/HotUpdateDll
+        CollectorGUID: f6502119eaf18ca409384584ea1e071d
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 

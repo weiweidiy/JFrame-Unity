@@ -151,3 +151,6 @@ UnityWebSocket.Runtime.Player.csproj
 YooAsset.Editor.csproj
 YooAsset.Player.csproj
 YooAsset.csproj
+Bundles/
+ProjectSettings/BurstAotSettings_StandaloneWindows.json
+yoo/
