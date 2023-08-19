@@ -374,3 +374,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playMode: 0
   hostDomainAddress: https://bigboom2023-1318645715.cos.ap-shanghai.myqcloud.com
+  entryName: Main

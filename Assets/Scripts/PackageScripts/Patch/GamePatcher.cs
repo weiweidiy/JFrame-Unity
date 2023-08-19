@@ -5,44 +5,93 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using YooAsset;
 
-public class GamePatcher : MonoBehaviour
+namespace JFrame.Game
 {
-    [SerializeField] EPlayMode playMode;
 
-    [SerializeField] string hostDomainAddress = "http://127.0.0.1";
-
-    // Start is called before the first frame update
-    async void Start()
+    public class GamePatcher : MonoSingleton<GamePatcher>
     {
-        //初始化YooAssets
-        var patchManager = new YooAssetsPatchManager(playMode, hostDomainAddress);
-        patchManager.onPatchComplete += PatchManager_onPatchComplete;
+        [SerializeField] EPlayMode playMode;
 
-        var patchMediator = new PatchMediator(patchManager);
+        [SerializeField] string hostDomainAddress = "http://127.0.0.1";
 
-        bool result = await patchManager.Initialize();
+        /// <summary>
+        /// 是否需要热更检测，只会进行1次
+        /// </summary>
+        bool needPatch = true;
 
-        if (result == true)
+        /// <summary>
+        /// 热更入口预制体名字
+        /// </summary>
+        [SerializeField] string entryName = "Main";
+
+        protected override void Awake()
         {
-            //开始更新流程
-            patchManager.Run();
-        }
-        else
-        {
-            Debug.LogError("YooAsset初始化失败！");
-        }
-    }
+            base.Awake();
 
-    private async void PatchManager_onPatchComplete(bool isSucceed)
-    {
+            DontDestroyOnLoad(gameObject);
+        }
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            if(needPatch)
+            {
+                Patch();
+                needPatch = false;
+            }
+            else
+            {
+                LoadEntry(entryName);
+            }
+                
+        }
+
+        /// <summary>
+        /// 开始热更流程
+        /// </summary>
+        public async void Patch()
+        {
+            //初始化YooAssets
+            var patchManager = new YooAssetsPatchManager(playMode, hostDomainAddress);
+            patchManager.onPatchComplete += PatchManager_onPatchComplete;
+
+            var patchMediator = new PatchMediator(patchManager);
+
+            bool result = await patchManager.Initialize();
+
+            if (result == true)
+            {
+                //开始更新流程
+                patchManager.Run();
+            }
+            else
+            {
+                Debug.LogError("YooAsset初始化失败！");
+            }
+        }
+
+        /// <summary>
+        /// patch完成
+        /// </summary>
+        /// <param name="isSucceed"></param>
+        private void PatchManager_onPatchComplete(bool isSucceed)
+        {
 
 #if !UNITY_EDITOR
         var dllManager = new DllManager();
         dllManager.LoadDLL();
 #endif
 
-        var _Handle = YooAssets.LoadAssetAsync<GameObject>("Main");
-        await _Handle.ToUniTask();
-        _Handle.InstantiateSync();
+            LoadEntry(entryName);
+        }
+
+
+        async void LoadEntry(string entryName)
+        {
+            var _Handle = YooAssets.LoadAssetAsync<GameObject>(entryName);
+            await _Handle.ToUniTask();
+            _Handle.InstantiateSync();
+        }
+
     }
 }

@@ -2,29 +2,32 @@
 using System.IO;
 using YooAsset;
 
-/// <summary>
-/// 资源文件解密服务类
-/// </summary>
-public class GameDecryptionServices : IDecryptionServices
+namespace JFrame.Game
 {
-    public ulong LoadFromFileOffset(DecryptFileInfo fileInfo)
+    /// <summary>
+    /// 资源文件解密服务类
+    /// </summary>
+    public class GameDecryptionServices : IDecryptionServices
     {
-        return 32;
-    }
+        public ulong LoadFromFileOffset(DecryptFileInfo fileInfo)
+        {
+            return 32;
+        }
 
-    public byte[] LoadFromMemory(DecryptFileInfo fileInfo)
-    {
-        throw new NotImplementedException();
-    }
+        public byte[] LoadFromMemory(DecryptFileInfo fileInfo)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Stream LoadFromStream(DecryptFileInfo fileInfo)
-    {
-        BundleStream bundleStream = new BundleStream(fileInfo.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-        return bundleStream;
-    }
+        public Stream LoadFromStream(DecryptFileInfo fileInfo)
+        {
+            BundleStream bundleStream = new BundleStream(fileInfo.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            return bundleStream;
+        }
 
-    public uint GetManagedReadBufferSize()
-    {
-        return 1024;
+        public uint GetManagedReadBufferSize()
+        {
+            return 1024;
+        }
     }
 }

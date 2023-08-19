@@ -154,3 +154,6 @@ YooAsset.csproj
 Bundles/
 ProjectSettings/BurstAotSettings_StandaloneWindows.json
 yoo/
+Adic.Player.csproj
+Adic.csproj
+Assembly-CSharp-Editor-firstpass.csproj

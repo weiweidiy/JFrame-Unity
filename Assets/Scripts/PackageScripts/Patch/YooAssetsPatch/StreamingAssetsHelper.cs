@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-#if UNITY_EDITOR
-/// <summary>
-/// StreamingAssets目录下资源查询帮助类
-/// </summary>
-public sealed class StreamingAssetsHelper
+namespace JFrame.Game
 {
-	public static void Init() { }
-	public static bool FileExists(string packageName, string fileName)
+#if UNITY_EDITOR
+	/// <summary>
+	/// StreamingAssets目录下资源查询帮助类
+	/// </summary>
+	public sealed class StreamingAssetsHelper
 	{
-		string filePath = Path.Combine(Application.streamingAssetsPath, StreamingAssetsDefine.RootFolderName, packageName, fileName);
-		return File.Exists(filePath);
+		public static void Init() { }
+		public static bool FileExists(string packageName, string fileName)
+		{
+			string filePath = Path.Combine(Application.streamingAssetsPath, StreamingAssetsDefine.RootFolderName, packageName, fileName);
+			return File.Exists(filePath);
+		}
 	}
-}
 #else
 /// <summary>
 /// StreamingAssets目录下资源查询帮助类
@@ -55,3 +57,4 @@ public sealed class StreamingAssetsHelper
 	}
 }
 #endif
+}

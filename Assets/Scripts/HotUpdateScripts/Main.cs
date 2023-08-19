@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Adic;
 
-public class Main : MonoBehaviour
+namespace JFrame.Game
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Main : MonoBehaviour
     {
-        Debug.Log("1111111111111111111111111111111111");
-    }
+        // Start is called before the first frame update
+        void Awake()
+        {
+            //³õÊ¼»¯ÈÝÆ÷
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+
     }
 }
+

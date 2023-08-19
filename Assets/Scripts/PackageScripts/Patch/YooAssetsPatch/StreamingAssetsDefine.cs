@@ -1,4 +1,8 @@
-﻿public class StreamingAssetsDefine
+﻿
+namespace JFrame.Game
 {
-    public const string RootFolderName = "yoo";
+    public class StreamingAssetsDefine
+    {
+        public const string RootFolderName = "yoo";
+    }
 }
