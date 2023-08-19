@@ -2,7 +2,7 @@
 using System.IO;
 using YooAsset;
 
-namespace JFrame.Game
+namespace JFrame.Game.Package
 {
     /// <summary>
     /// 资源文件解密服务类

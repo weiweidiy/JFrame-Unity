@@ -1,6 +1,6 @@
 ﻿using YooAsset;
 
-namespace JFrame.Game
+namespace JFrame.Game.Package
 {
     /// <summary>
     /// 远端资源地址查询服务类

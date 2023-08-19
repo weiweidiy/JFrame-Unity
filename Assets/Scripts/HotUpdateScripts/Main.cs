@@ -2,17 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Adic;
+using Adic.Container;
 
-namespace JFrame.Game
+namespace JFrame.Game.HotUpdate
 {
-    public class Main : MonoBehaviour
+    /// <summary>
+    /// 热更新入口，主要负责IOC容器绑定工作
+    /// </summary>
+    public class Main : ContextRoot
     {
-        // Start is called before the first frame update
-        void Awake()
+        public static Main Ins;
+
+        IInjectionContainer container;
+
+        protected new void Awake()
         {
-            //初始化容器
+            if (Ins != null)
+            {
+                Debug.LogError("重复单例 :" + Ins.gameObject.name);
+                Destroy(gameObject);
+                return;
+            }
+            Ins = this;
+            DontDestroyOnLoad(gameObject);
+
+            base.Awake();
         }
 
+        public override void SetupContainers()
+        {
+            //绑定ui管理器
+            container = AddContainer<InjectionContainer>()
+                .RegisterExtension<UnityBindingContainerExtension>();
+
+            container.Bind<GameManager>().ToSingleton();
+
+            //.Bind<Transform>().ToGameObject("Cube")
+            //.Bind<Test>().ToGameObject();
+
+
+        }
+
+        public override void Init()
+        {
+            var gameManager = container.Resolve<GameManager>();
+
+
+        }
 
     }
 }

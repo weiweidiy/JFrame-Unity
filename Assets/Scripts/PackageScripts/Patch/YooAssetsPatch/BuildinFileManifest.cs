@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace JFrame.Game
+namespace JFrame.Game.Package
 {
     /// <summary>
     /// 内置资源清单

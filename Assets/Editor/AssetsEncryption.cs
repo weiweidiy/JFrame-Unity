@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JFrame.Game.Package;
+using System;
 using System.IO;
 using UnityEngine;
 using YooAsset;
@@ -12,7 +13,7 @@ using YooAsset;
 /// 
 /// </summary>
 
-namespace JFrame.Game
+namespace JFrame.Game.Editor
 {
     public class EncryptionNone : IEncryptionServices
     {

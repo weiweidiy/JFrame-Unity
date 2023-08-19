@@ -1,6 +1,6 @@
 ﻿using YooAsset;
 
-namespace JFrame.Game
+namespace JFrame.Game.Package
 {
     /// <summary>
     /// 资源文件查询服务类

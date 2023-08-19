@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using YooAsset;
 
-namespace JFrame.Game
+namespace JFrame.Game.Package
 {
     public class YooAssetsPatchManager : IPatchManager
     {

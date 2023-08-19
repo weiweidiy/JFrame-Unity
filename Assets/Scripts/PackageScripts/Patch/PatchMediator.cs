@@ -3,7 +3,7 @@
 
 using UnityEngine;
 
-namespace JFrame.Game
+namespace JFrame.Game.Package
 {
     public class PatchMediator
     {

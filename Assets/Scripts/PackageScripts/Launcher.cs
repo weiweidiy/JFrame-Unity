@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using YooAsset;
 
-namespace JFrame.Game
+namespace JFrame.Game.Package
 {
     public class Launcher : MonoBehaviour
     {

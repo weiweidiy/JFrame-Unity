@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace JFrame.Game
+namespace JFrame.Game.Package
 {
 #if UNITY_EDITOR
 	/// <summary>

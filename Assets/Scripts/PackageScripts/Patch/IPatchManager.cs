@@ -1,7 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using System;
 
-namespace JFrame.Game
+namespace JFrame.Game.Package
 {
     public interface IPatchManager
     {

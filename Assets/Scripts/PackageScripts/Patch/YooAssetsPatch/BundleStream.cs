@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace JFrame.Game
+namespace JFrame.Game.Package
 {
     public class BundleStream : FileStream
     {

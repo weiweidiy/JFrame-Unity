@@ -2,7 +2,7 @@
 using System.IO;
 using UnityEngine;
 
-namespace JFrame.Game
+namespace JFrame.Game.Package
 {
     internal class PreprocessBuild : UnityEditor.Build.IPreprocessBuildWithReport
     {
