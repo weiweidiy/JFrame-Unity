@@ -46,6 +46,7 @@ namespace JFrame.Game.HotUpdate
         public override void Init()
         {
             var gameManager = container.Resolve<GameManager>();
+            gameManager.Run();
 
 
         }
