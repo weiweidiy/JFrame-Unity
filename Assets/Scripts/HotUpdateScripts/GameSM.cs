@@ -7,48 +7,45 @@ namespace JFrame.Game.HotUpdate
     {
         enum Trigger
         {
-            //CallDialed,
-            //CallConnected,
-            //LeftMessage,
-            //PlacedOnHold,
-            //TakenOffHold,
-            //PhoneHurledAgainstWall,
-            //MuteMicrophone,
-            //UnmuteMicrophone,
-            //SetVolume
-
             StartGame,
+            StartMenu
         }
 
         enum State
         {
-            //OffHook,
-            //Ringing,
-            //Connected,
-            //OnHold,
-            //PhoneDestroyed
-
             Menu,
-            Requesting,
-            Connected,
             Game,
         }
 
         State _state = State.Menu;
 
-        StateMachine<State, Trigger> _machine;
+        StateMachine<State, Trigger> machine;
+        StateMachine<State, Trigger>.TriggerWithParameters<bool> startMenuTrigger;
         //StateMachine<State, Trigger>.TriggerWithParameters<int> _setVolumeTrigger;
         //StateMachine<State, Trigger>.TriggerWithParameters<string> _setCalleeTrigger;
 
         public GameSM()
         {
             //配置游戏状态机
-            _machine = new StateMachine<State, Trigger>(() => _state, s => _state = s);
-            //_setVolumeTrigger = _machine.SetTriggerParameters<int>(Trigger.SetVolume);
+            machine = new StateMachine<State, Trigger>(() => _state, s => _state = s);
+            startMenuTrigger = machine.SetTriggerParameters<bool>(Trigger.StartMenu);
             //_setCalleeTrigger = _machine.SetTriggerParameters<string>(Trigger.CallDialed);
 
-            _machine.Configure(State.Menu)
+            machine.Configure(State.Menu)
                 .Permit(Trigger.StartGame, State.Game);
+
+            machine.Configure(State.Game)
+                .Permit(Trigger.StartMenu, State.Menu);
+        }
+
+        public void StartGame()
+        {
+            machine.Fire(Trigger.StartGame);
+        }
+
+        public void ReturnMenu()
+        {
+            machine.Fire(Trigger.StartMenu);
         }
     }
 }
