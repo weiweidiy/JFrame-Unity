@@ -1,20 +1,17 @@
 ﻿
+using StateMachine;
 using UnityEngine;
 
 namespace JFrame.Game.HotUpdate
 {
     public class GameManager
     {
-
-        
-
-        public GameManager()
-        {
-
-        }
-
+        /// <summary>
+        /// 启动游戏
+        /// </summary>
         public void Run()
         {
+            
 
         }
 
@@ -27,6 +24,12 @@ namespace JFrame.Game.HotUpdate
             Debug.Log("OnEnterMenu");
         }
 
+        public void ToMenu()
+        {
+            //切换场景
+            Debug.Log("ToMenu");
+        }
+
         /// <summary>
         /// 开始游戏
         /// </summary>
@@ -34,11 +37,6 @@ namespace JFrame.Game.HotUpdate
         {
             //切换场景
             Debug.Log("ToGame");
-        }
-
-        public void QuitGame()
-        {
-
         }
     }
 }
