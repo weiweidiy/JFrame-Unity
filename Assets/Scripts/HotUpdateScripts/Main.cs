@@ -49,8 +49,8 @@ namespace JFrame.Game.HotUpdate
             var gameManager = container.Resolve<GameManager>();
             gameManager.Run();
 
-            //gameManager.ToGame(new PlayerAccount() { account = "1" });
-            //gameManager.ToMenu(true);
+            gameManager.ToGame(new PlayerAccount() { account = "1" });
+            gameManager.ToMenu(true);
 
         }
 

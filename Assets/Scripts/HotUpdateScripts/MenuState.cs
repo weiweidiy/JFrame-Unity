@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace JFrame.Game.HotUpdate
 {
@@ -11,9 +12,10 @@ namespace JFrame.Game.HotUpdate
 
         }
 
-        internal void OnEnter(bool isRestart)
+        internal async UniTask OnEnter(bool isRestart)
         {
             Debug.Log("MenuState OnEnter " + isRestart);
+            await UniTask.Delay(2000);
         }
     }
 }

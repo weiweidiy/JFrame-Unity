@@ -1,5 +1,6 @@
 ﻿
-using StateMachine;
+using Cysharp.Threading.Tasks;
+using Stateless;
 using System;
 using UnityEngine;
 
@@ -38,7 +39,7 @@ namespace JFrame.Game.HotUpdate
 
 
             machine.Configure(menuState)
-                .OnEntryFrom(startMenuTrigger, (isRestart) => { OnEnterMenu(menuState, isRestart); })
+                .OnEntryFromAsync(startMenuTrigger, async (isRestart) => { await OnEnterMenu(menuState, isRestart); })
                 .Permit(Trigger.StartGame, gameState);
 
             machine.Configure(gameState)
@@ -62,7 +63,7 @@ namespace JFrame.Game.HotUpdate
         /// <param name="isRestart"></param>
         public void SwitchToMenu(bool isRestart)
         {
-            machine.Fire(startMenuTrigger, isRestart);
+            machine.FireAsync(startMenuTrigger, isRestart);
         }
 
 
@@ -90,9 +91,9 @@ namespace JFrame.Game.HotUpdate
         /// </summary>
         /// <param name="state"></param>
         /// <param name="isRestart"></param>
-        private void OnEnterMenu(MenuState state, bool isRestart)
+        private UniTask OnEnterMenu(MenuState state, bool isRestart)
         {
-            state.OnEnter(isRestart);
+            return state.OnEnter(isRestart);
         }
 
 
