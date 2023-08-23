@@ -45,6 +45,12 @@ namespace JFrame.Game.HotUpdate
             Debug.Log("ToGame");
             sm.SwitchToGame(account);
         }
+
+
+        public void SwitchScene(string sceneName)
+        {
+
+        }
     }
 }
 

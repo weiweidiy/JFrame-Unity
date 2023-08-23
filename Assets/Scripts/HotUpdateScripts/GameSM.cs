@@ -37,7 +37,6 @@ namespace JFrame.Game.HotUpdate
                 .Permit(Trigger.StartMenu, menuState)
                 .Permit(Trigger.StartGame, gameState);
 
-
             machine.Configure(menuState)
                 .OnEntryFromAsync(startMenuTrigger, async (isRestart) => { await OnEnterMenu(menuState, isRestart); })
                 .Permit(Trigger.StartGame, gameState);
