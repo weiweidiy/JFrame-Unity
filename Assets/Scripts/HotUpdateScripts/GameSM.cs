@@ -1,5 +1,7 @@
 ﻿
 using StateMachine;
+using System;
+using UnityEngine;
 
 namespace JFrame.Game.HotUpdate
 {
@@ -11,42 +13,89 @@ namespace JFrame.Game.HotUpdate
             StartMenu
         }
 
-        enum State
-        {
-            Menu,
-            Game,
-        }
-
-        State _state = State.Menu;
-
         StateMachine<State, Trigger> machine;
         StateMachine<State, Trigger>.TriggerWithParameters<bool> startMenuTrigger;
-        //StateMachine<State, Trigger>.TriggerWithParameters<int> _setVolumeTrigger;
-        //StateMachine<State, Trigger>.TriggerWithParameters<string> _setCalleeTrigger;
+        StateMachine<State, Trigger>.TriggerWithParameters<PlayerAccount> startGameTrigger;
 
-        public GameSM()
+        /// <summary>
+        /// 初始化状态机
+        /// </summary>
+        /// <param name="owner"></param>
+        public void Initialize(GameManager owner)
         {
+            var initState = new InitState();
+            var menuState = new MenuState(owner);
+            var gameState = new GameState(owner);
+
             //配置游戏状态机
-            machine = new StateMachine<State, Trigger>(() => _state, s => _state = s);
+            machine = new StateMachine<State, Trigger>(initState/*() => _state, s => _state = s*/);
             startMenuTrigger = machine.SetTriggerParameters<bool>(Trigger.StartMenu);
-            //_setCalleeTrigger = _machine.SetTriggerParameters<string>(Trigger.CallDialed);
+            startGameTrigger = machine.SetTriggerParameters<PlayerAccount>(Trigger.StartGame);
 
-            machine.Configure(State.Menu)
-                .Permit(Trigger.StartGame, State.Game);
+            machine.Configure(initState)
+                .Permit(Trigger.StartMenu, menuState)
+                .Permit(Trigger.StartGame, gameState);
 
-            machine.Configure(State.Game)
-                .Permit(Trigger.StartMenu, State.Menu);
+
+            machine.Configure(menuState)
+                .OnEntryFrom(startMenuTrigger, (isRestart) => { OnEnterMenu(menuState, isRestart); })
+                .Permit(Trigger.StartGame, gameState);
+
+            machine.Configure(gameState)
+                .OnEntryFrom(startGameTrigger, (playerAccount) => { OnEnterGame(gameState, playerAccount); })
+                .Permit(Trigger.StartMenu, menuState);
+
+            machine.OnTransitioned(OnTransition);
         }
 
-        public void StartGame()
+        /// <summary>
+        /// 切换到游戏状态
+        /// </summary>
+        public void SwitchToGame(PlayerAccount account)
         {
-            machine.Fire(Trigger.StartGame);
+            machine.Fire(startGameTrigger, account);
         }
 
-        public void ReturnMenu()
+        /// <summary>
+        /// 切换到菜单状态
+        /// </summary>
+        /// <param name="isRestart"></param>
+        public void SwitchToMenu(bool isRestart)
         {
-            machine.Fire(Trigger.StartMenu);
+            machine.Fire(startMenuTrigger, isRestart);
         }
+
+
+        /// <summary>
+        /// 状态切换时响应方法
+        /// </summary>
+        /// <param name="obj"></param>
+        private void OnTransition(StateMachine<State, Trigger>.Transition obj)
+        {
+            Debug.Log("OnTransition " + obj.Source + " / " + obj.Destination);
+        }
+
+        /// <summary>
+        /// 进入游戏状态了
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="playerAccount"></param>
+        private void OnEnterGame(GameState state, PlayerAccount playerAccount)
+        {
+            state.OnEnter(playerAccount);
+        }
+
+        /// <summary>
+        /// 进入菜单状态了
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="isRestart"></param>
+        private void OnEnterMenu(MenuState state, bool isRestart)
+        {
+            state.OnEnter(isRestart);
+        }
+
+
     }
 }
 

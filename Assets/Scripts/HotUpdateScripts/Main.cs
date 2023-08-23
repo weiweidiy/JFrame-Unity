@@ -35,6 +35,7 @@ namespace JFrame.Game.HotUpdate
             container = AddContainer<InjectionContainer>()
                 .RegisterExtension<UnityBindingContainerExtension>();
 
+            container.Bind<GameSM>().ToSingleton();
             container.Bind<GameManager>().ToSingleton();
 
             //.Bind<Transform>().ToGameObject("Cube")
@@ -48,6 +49,8 @@ namespace JFrame.Game.HotUpdate
             var gameManager = container.Resolve<GameManager>();
             gameManager.Run();
 
+            //gameManager.ToGame(new PlayerAccount() { account = "1" });
+            //gameManager.ToMenu(true);
 
         }
 
