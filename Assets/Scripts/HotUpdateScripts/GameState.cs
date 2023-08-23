@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace JFrame.Game.HotUpdate
 {
@@ -9,9 +10,10 @@ namespace JFrame.Game.HotUpdate
 
         }
 
-        internal void OnEnter(PlayerAccount playerAccount)
+        internal async UniTask OnEnter(PlayerAccount playerAccount)
         {
             Debug.Log("GameState OnEnter " + playerAccount.account);
+            await UniTask.Delay(1000);
         }
     }
 }

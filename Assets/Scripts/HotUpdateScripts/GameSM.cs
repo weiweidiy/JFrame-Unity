@@ -43,7 +43,7 @@ namespace JFrame.Game.HotUpdate
                 .Permit(Trigger.StartGame, gameState);
 
             machine.Configure(gameState)
-                .OnEntryFrom(startGameTrigger, (playerAccount) => { OnEnterGame(gameState, playerAccount); })
+                .OnEntryFromAsync(startGameTrigger, async (playerAccount) => { await OnEnterGame(gameState, playerAccount); })
                 .Permit(Trigger.StartMenu, menuState);
 
             machine.OnTransitioned(OnTransition);
@@ -81,9 +81,9 @@ namespace JFrame.Game.HotUpdate
         /// </summary>
         /// <param name="state"></param>
         /// <param name="playerAccount"></param>
-        private void OnEnterGame(GameState state, PlayerAccount playerAccount)
+        private UniTask OnEnterGame(GameState state, PlayerAccount playerAccount)
         {
-            state.OnEnter(playerAccount);
+            return state.OnEnter(playerAccount);
         }
 
         /// <summary>
