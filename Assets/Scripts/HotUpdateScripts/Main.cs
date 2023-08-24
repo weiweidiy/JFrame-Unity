@@ -7,7 +7,7 @@ using Adic.Container;
 namespace JFrame.Game.HotUpdate
 {
     /// <summary>
-    /// ÈÈ¸üÐÂÈë¿Ú£¬Ö÷Òª¸ºÔðIOCÈÝÆ÷°ó¶¨¹¤×÷
+    /// ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½IOCï¿½ï¿½ï¿½ï¿½ï¿½ó¶¨¹ï¿½ï¿½ï¿½
     /// </summary>
     public class Main : ContextRoot
     {
@@ -19,7 +19,7 @@ namespace JFrame.Game.HotUpdate
         {
             if (Ins != null)
             {
-                Debug.LogError("ÖØ¸´µ¥Àý :" + Ins.gameObject.name);
+                Debug.LogError("ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ :" + Ins.gameObject.name);
                 Destroy(gameObject);
                 return;
             }
@@ -31,10 +31,11 @@ namespace JFrame.Game.HotUpdate
 
         public override void SetupContainers()
         {
-            //°ó¶¨ui¹ÜÀíÆ÷
+            //ï¿½ï¿½uiï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             container = AddContainer<InjectionContainer>()
                 .RegisterExtension<UnityBindingContainerExtension>();
 
+            container.Bind<YooAssetsLoader>().ToSingleton();
             container.Bind<GameSM>().ToSingleton();
             container.Bind<GameManager>().ToSingleton();
 

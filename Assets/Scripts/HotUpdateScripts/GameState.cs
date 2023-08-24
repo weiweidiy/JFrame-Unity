@@ -1,14 +1,12 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Adic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace JFrame.Game.HotUpdate
 {
-    public class GameState : State
+    public class GameState : GameBaseState
     {
-        public GameState(GameManager owner)
-        {
 
-        }
 
         internal async UniTask OnEnter(PlayerAccount playerAccount)
         {

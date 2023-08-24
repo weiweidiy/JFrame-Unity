@@ -1,6 +1,6 @@
 ﻿namespace JFrame.Game.HotUpdate
 {
-    public class InitState : State
+    public class InitState : GameState
     {
 
     }

@@ -1,4 +1,6 @@
 ﻿
+using Adic;
+using Adic.Container;
 using Cysharp.Threading.Tasks;
 using Stateless;
 using System;
@@ -14,9 +16,21 @@ namespace JFrame.Game.HotUpdate
             StartMenu
         }
 
-        StateMachine<State, Trigger> machine;
-        StateMachine<State, Trigger>.TriggerWithParameters<bool> startMenuTrigger;
-        StateMachine<State, Trigger>.TriggerWithParameters<PlayerAccount> startGameTrigger;
+        StateMachine<GameBaseState, Trigger> machine;
+        StateMachine<GameBaseState, Trigger>.TriggerWithParameters<bool> startMenuTrigger;
+        StateMachine<GameBaseState, Trigger>.TriggerWithParameters<PlayerAccount> startGameTrigger;
+
+        [Inject]
+        IInjectionContainer container;
+
+        [Inject]
+        public void Init()
+        {
+            Debug.Assert(container != null, "container is null");
+            container.Bind<InitState>().ToSingleton();
+            container.Bind<MenuState>().ToSingleton();
+            container.Bind<GameState>().ToSingleton();
+        }
 
         /// <summary>
         /// 初始化状态机
@@ -24,12 +38,14 @@ namespace JFrame.Game.HotUpdate
         /// <param name="owner"></param>
         public void Initialize(GameManager owner)
         {
-            var initState = new InitState();
-            var menuState = new MenuState(owner);
-            var gameState = new GameState(owner);
+            var initState = container.Resolve<InitState>();
+            var menuState = container.Resolve<MenuState>();
+            var gameState = container.Resolve<GameState>();
+            menuState.Owner = owner;
+            gameState.Owner = owner;
 
             //配置游戏状态机
-            machine = new StateMachine<State, Trigger>(initState/*() => _state, s => _state = s*/);
+            machine = new StateMachine<GameBaseState, Trigger>(initState/*() => _state, s => _state = s*/);
             startMenuTrigger = machine.SetTriggerParameters<bool>(Trigger.StartMenu);
             startGameTrigger = machine.SetTriggerParameters<PlayerAccount>(Trigger.StartGame);
 
@@ -70,7 +86,7 @@ namespace JFrame.Game.HotUpdate
         /// 状态切换时响应方法
         /// </summary>
         /// <param name="obj"></param>
-        private void OnTransition(StateMachine<State, Trigger>.Transition obj)
+        private void OnTransition(StateMachine<GameBaseState, Trigger>.Transition obj)
         {
             Debug.Log("OnTransition " + obj.Source + " / " + obj.Destination);
         }

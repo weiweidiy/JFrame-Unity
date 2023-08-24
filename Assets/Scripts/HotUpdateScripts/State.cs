@@ -1,8 +1,8 @@
 ﻿namespace JFrame.Game.HotUpdate
 {
-    public class State
+    public class GameBaseState
     {
-
+        public GameManager Owner { get; set; }
     }
 }
 
