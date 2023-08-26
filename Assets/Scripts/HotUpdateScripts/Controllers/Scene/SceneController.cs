@@ -6,15 +6,19 @@ using UnityEngine;
 
 namespace JFrame.Game.HotUpdate
 {
-    public class GameManager
+    public class SceneController
     {
+        public event Action<string, string> onStateChanged;
+
         [Inject]
-        GameSM sm;
+        SceneSM sm;
 
         [Inject]
         void Initialize()
         {
-            sm.Initialize(this);     
+            Debug.Log("GameManager init");
+            sm.Initialize(this);
+            sm.onStateChanged += OnStateChanged;
         }
 
         /// <summary>
@@ -47,9 +51,10 @@ namespace JFrame.Game.HotUpdate
         }
 
 
-        public void SwitchScene(string sceneName)
+        void OnStateChanged(SceneBaseState source , SceneBaseState target)
         {
-
+            onStateChanged?.Invoke(source.Name, target.Name);
+            Debug.Log("OnStateChanged" + target.Name);
         }
     }
 }

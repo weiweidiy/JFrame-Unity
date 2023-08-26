@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Adic;
 using Adic.Container;
+using JFrame.Common;
 
 namespace JFrame.Game.HotUpdate
 {
@@ -35,23 +36,22 @@ namespace JFrame.Game.HotUpdate
             container = AddContainer<InjectionContainer>()
                 .RegisterExtension<UnityBindingContainerExtension>();
 
-            container.Bind<YooAssetsLoader>().ToSingleton();
-            container.Bind<GameSM>().ToSingleton();
-            container.Bind<GameManager>().ToSingleton();
+            //绑定通用逻辑
+            container.Bind<IAssetsLoader>().ToSingleton<YooAssetsLoader>();
 
-            //.Bind<Transform>().ToGameObject("Cube")
-            //.Bind<Test>().ToGameObject();
-
+            //绑定业务逻辑
+            container.Bind<SceneSM>().ToSingleton();
+            container.Bind<SceneController>().ToSingleton();
 
         }
 
         public override void Init()
         {
-            var gameManager = container.Resolve<GameManager>();
+            var gameManager = container.Resolve<SceneController>();
             gameManager.Run();
 
             gameManager.ToGame(new PlayerAccount() { account = "1" });
-            gameManager.ToMenu(true);
+            //gameManager.ToMenu(true);
 
         }
 

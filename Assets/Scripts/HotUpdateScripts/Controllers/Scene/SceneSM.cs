@@ -8,17 +8,19 @@ using UnityEngine;
 
 namespace JFrame.Game.HotUpdate
 {
-    public class GameSM
+    public class SceneSM
     {
+        public event Action<SceneBaseState, SceneBaseState> onStateChanged;
+
         enum Trigger
         {
             StartGame,
             StartMenu
         }
 
-        StateMachine<GameBaseState, Trigger> machine;
-        StateMachine<GameBaseState, Trigger>.TriggerWithParameters<bool> startMenuTrigger;
-        StateMachine<GameBaseState, Trigger>.TriggerWithParameters<PlayerAccount> startGameTrigger;
+        StateMachine<SceneBaseState, Trigger> machine;
+        StateMachine<SceneBaseState, Trigger>.TriggerWithParameters<bool> startMenuTrigger;
+        StateMachine<SceneBaseState, Trigger>.TriggerWithParameters<PlayerAccount> startGameTrigger;
 
         [Inject]
         IInjectionContainer container;
@@ -28,24 +30,24 @@ namespace JFrame.Game.HotUpdate
         {
             Debug.Assert(container != null, "container is null");
             container.Bind<InitState>().ToSingleton();
-            container.Bind<MenuState>().ToSingleton();
-            container.Bind<GameState>().ToSingleton();
+            container.Bind<MenuSceneState>().ToSingleton();
+            container.Bind<BattleSceneState>().ToSingleton();
         }
 
         /// <summary>
         /// 初始化状态机
         /// </summary>
         /// <param name="owner"></param>
-        public void Initialize(GameManager owner)
+        public void Initialize(SceneController owner)
         {
             var initState = container.Resolve<InitState>();
-            var menuState = container.Resolve<MenuState>();
-            var gameState = container.Resolve<GameState>();
+            var menuState = container.Resolve<MenuSceneState>();
+            var gameState = container.Resolve<BattleSceneState>();
             menuState.Owner = owner;
             gameState.Owner = owner;
 
             //配置游戏状态机
-            machine = new StateMachine<GameBaseState, Trigger>(initState/*() => _state, s => _state = s*/);
+            machine = new StateMachine<SceneBaseState, Trigger>(initState/*() => _state, s => _state = s*/);
             startMenuTrigger = machine.SetTriggerParameters<bool>(Trigger.StartMenu);
             startGameTrigger = machine.SetTriggerParameters<PlayerAccount>(Trigger.StartGame);
 
@@ -86,9 +88,10 @@ namespace JFrame.Game.HotUpdate
         /// 状态切换时响应方法
         /// </summary>
         /// <param name="obj"></param>
-        private void OnTransition(StateMachine<GameBaseState, Trigger>.Transition obj)
+        private void OnTransition(StateMachine<SceneBaseState, Trigger>.Transition obj)
         {
             Debug.Log("OnTransition " + obj.Source + " / " + obj.Destination);
+            onStateChanged?.Invoke(obj.Source, obj.Destination);
         }
 
         /// <summary>
@@ -96,7 +99,7 @@ namespace JFrame.Game.HotUpdate
         /// </summary>
         /// <param name="state"></param>
         /// <param name="playerAccount"></param>
-        private UniTask OnEnterGame(GameState state, PlayerAccount playerAccount)
+        private UniTask OnEnterGame(BattleSceneState state, PlayerAccount playerAccount)
         {
             return state.OnEnter(playerAccount);
         }
@@ -106,7 +109,7 @@ namespace JFrame.Game.HotUpdate
         /// </summary>
         /// <param name="state"></param>
         /// <param name="isRestart"></param>
-        private UniTask OnEnterMenu(MenuState state, bool isRestart)
+        private UniTask OnEnterMenu(MenuSceneState state, bool isRestart)
         {
             return state.OnEnter(isRestart);
         }
