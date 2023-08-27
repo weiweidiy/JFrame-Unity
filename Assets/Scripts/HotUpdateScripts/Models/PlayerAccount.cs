@@ -1,6 +1,7 @@
-﻿namespace JFrame.Game.Model
+﻿namespace JFrame.Game.Models
 {
-    public class PlayerAccount
+
+    public class PlayerAccount : Model
     {
         public string account;
     }

@@ -2,7 +2,7 @@
 using Adic;
 using Adic.Container;
 using Cysharp.Threading.Tasks;
-using JFrame.Game.Model;
+using JFrame.Game.Models;
 using Stateless;
 using System;
 using System.Threading.Tasks;

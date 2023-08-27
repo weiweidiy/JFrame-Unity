@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Adic;
-using JFrame.Game.Model;
+using JFrame.Game.Models;
 using JFrame.Game.View;
 using UnityEngine;
 using UnityEngine.UI;

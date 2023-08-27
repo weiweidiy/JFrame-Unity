@@ -1,6 +1,6 @@
 ﻿using Adic;
 using Cysharp.Threading.Tasks;
-using JFrame.Game.Model;
+using JFrame.Game.Models;
 using UnityEngine;
 
 namespace JFrame.Game.View

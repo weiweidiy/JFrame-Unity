@@ -4,7 +4,7 @@ using UnityEngine;
 using Adic;
 using Adic.Container;
 using JFrame.Common;
-using JFrame.Game.Model;
+using JFrame.Game.Models;
 using JFrame.Game.View;
 using JFrame.Game.Commands;
 using UnityEditor.Search;

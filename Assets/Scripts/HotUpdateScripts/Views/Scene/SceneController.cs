@@ -1,6 +1,6 @@
 ﻿
 using Adic;
-using JFrame.Game.Model;
+using JFrame.Game.Models;
 using Stateless;
 using System;
 using UnityEngine;
