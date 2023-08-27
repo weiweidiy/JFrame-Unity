@@ -162,4 +162,5 @@ Main.csproj
 Assets/StreamingAssets/build_info
 Stateless.Player.csproj
 Stateless.csproj
+Assets/StreamingAssets/build_info.meta
 

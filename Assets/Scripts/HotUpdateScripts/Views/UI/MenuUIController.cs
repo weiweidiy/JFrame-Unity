@@ -28,7 +28,7 @@ namespace JFrame.Game.View
             Debug.Log("Main ui run 初始化main ui");
             //创建panel等ui
             var menu = assetLoader.Instantiate("Menu");
-            playerAccount.account = "Jichunwei";
+            playerAccount.Account = "Jichunwei";
             await UniTask.DelayFrame(1);
         }
 

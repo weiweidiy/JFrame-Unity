@@ -17,7 +17,7 @@ namespace JFrame.Game.View
 
         internal async UniTask OnEnter(PlayerAccount playerAccount)
         {
-            Debug.Log("BattleState OnEnter " + playerAccount.account);
+            Debug.Log("BattleState OnEnter " + playerAccount.Account);
             var scene = await assetLoader.LoadSceneAsync(Name);
         }
     }

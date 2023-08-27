@@ -2,8 +2,9 @@
 {
 
     public class PlayerAccount : Model
-    {
-        public string account;
+    {  
+        public string Account { get; set; }
     }
 }
+
 
