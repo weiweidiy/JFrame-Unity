@@ -4,8 +4,12 @@ using UnityEngine;
 using Adic;
 using Adic.Container;
 using JFrame.Common;
+using JFrame.Game.Model;
+using JFrame.Game.View;
+using JFrame.Game.Commands;
+using UnityEditor.Search;
 
-namespace JFrame.Game.HotUpdate
+namespace JFrame.Game
 {
     /// <summary>
     /// �ȸ�����ڣ���Ҫ����IOC�����󶨹���
@@ -34,7 +38,12 @@ namespace JFrame.Game.HotUpdate
         {
             //��ui������
             container = AddContainer<InjectionContainer>()
-                .RegisterExtension<UnityBindingContainerExtension>();
+                .RegisterExtension<UnityBindingContainerExtension>()
+                .RegisterExtension<CommanderContainerExtension>();
+                
+
+            //绑定模型
+            container.Bind<PlayerAccount>().ToSingleton();
 
             //绑定通用逻辑
             container.Bind<IAssetsLoader>().ToSingleton<YooAssetsLoader>();
@@ -42,15 +51,22 @@ namespace JFrame.Game.HotUpdate
             //绑定业务逻辑
             container.Bind<SceneSM>().ToSingleton();
             container.Bind<SceneController>().ToSingleton();
+            container.Bind<UIController>().ToSingleton<MenuUIController>();
+            container.Bind<UIController>().ToSingleton<BattleUIController>();
+
+
+            //绑定命令
+            container.RegisterCommand<RunGame>();
+
 
         }
 
         public override void Init()
         {
-            var gameManager = container.Resolve<SceneController>();
-            gameManager.Run();
+            var dispatcher = container.GetCommandDispatcher();
+            dispatcher.Dispatch<RunGame>();
 
-            gameManager.ToGame(new PlayerAccount() { account = "1" });
+            //sceneController.SwitchToBattle(new PlayerAccount() { account = "1" });
             //gameManager.ToMenu(true);
 
         }

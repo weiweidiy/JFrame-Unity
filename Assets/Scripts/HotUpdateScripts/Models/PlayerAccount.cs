@@ -1,4 +1,4 @@
-﻿namespace JFrame.Game.HotUpdate
+﻿namespace JFrame.Game.Model
 {
     public class PlayerAccount
     {

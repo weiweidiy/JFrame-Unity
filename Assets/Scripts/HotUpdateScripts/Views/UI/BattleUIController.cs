@@ -1,0 +1,36 @@
+﻿using Adic;
+using Cysharp.Threading.Tasks;
+using JFrame.Game.Model;
+using UnityEngine;
+
+namespace JFrame.Game.View
+{
+    public class BattleUIController : UIController
+    {
+        [Inject]
+        SceneController sceneController;
+
+        [Inject]
+        PlayerAccount playerAccount;
+
+        [Inject]
+        void Init()
+        {
+            sceneController.onSceneEnter += SceneController_onSceneEnter;
+        }
+
+        public override UniTask Run()
+        {
+            Debug.Log("battle ui run 初始化battle ui" + playerAccount.account);
+            return UniTask.DelayFrame(1);
+        }
+
+        private void SceneController_onSceneEnter(string scene)
+        {
+            if (!scene.Equals("Battle"))
+                return;
+
+            Run();
+        }
+    }
+}

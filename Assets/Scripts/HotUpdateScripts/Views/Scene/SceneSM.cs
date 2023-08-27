@@ -2,15 +2,19 @@
 using Adic;
 using Adic.Container;
 using Cysharp.Threading.Tasks;
+using JFrame.Game.Model;
 using Stateless;
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
-namespace JFrame.Game.HotUpdate
+namespace JFrame.Game.View
 {
     public class SceneSM
     {
-        public event Action<SceneBaseState, SceneBaseState> onStateChanged;
+        public event Action<SceneBaseState, SceneBaseState> onSceneTransition;
+        public event Action<SceneBaseState> onSceneEnter;
+        public event Action<SceneBaseState> onSceneExit;
 
         enum Trigger
         {
@@ -30,7 +34,7 @@ namespace JFrame.Game.HotUpdate
         {
             Debug.Assert(container != null, "container is null");
             container.Bind<InitState>().ToSingleton();
-            container.Bind<MenuSceneState>().ToSingleton();
+            container.Bind<MainSceneState>().ToSingleton();
             container.Bind<BattleSceneState>().ToSingleton();
         }
 
@@ -41,7 +45,7 @@ namespace JFrame.Game.HotUpdate
         public void Initialize(SceneController owner)
         {
             var initState = container.Resolve<InitState>();
-            var menuState = container.Resolve<MenuSceneState>();
+            var menuState = container.Resolve<MainSceneState>();
             var gameState = container.Resolve<BattleSceneState>();
             menuState.Owner = owner;
             gameState.Owner = owner;
@@ -56,29 +60,32 @@ namespace JFrame.Game.HotUpdate
                 .Permit(Trigger.StartGame, gameState);
 
             machine.Configure(menuState)
-                .OnEntryFromAsync(startMenuTrigger, async (isRestart) => { await OnEnterMenu(menuState, isRestart); })
+                .OnEntryFromAsync(startMenuTrigger, async (isRestart) => { await OnEnterMain(menuState, isRestart); })
+                .OnExitAsync( async () => { await OnExitMain(menuState); })
                 .Permit(Trigger.StartGame, gameState);
 
             machine.Configure(gameState)
-                .OnEntryFromAsync(startGameTrigger, async (playerAccount) => { await OnEnterGame(gameState, playerAccount); })
+                .OnEntryFromAsync(startGameTrigger, async (playerAccount) => { await OnEnterBattle(gameState, playerAccount); })
                 .Permit(Trigger.StartMenu, menuState);
 
             machine.OnTransitioned(OnTransition);
         }
 
+
+
         /// <summary>
         /// 切换到游戏状态
         /// </summary>
-        public void SwitchToGame(PlayerAccount account)
+        public void SwitchToBattle(PlayerAccount account)
         {
-            machine.Fire(startGameTrigger, account);
+            machine.FireAsync(startGameTrigger, account);
         }
 
         /// <summary>
         /// 切换到菜单状态
         /// </summary>
         /// <param name="isRestart"></param>
-        public void SwitchToMenu(bool isRestart)
+        public void SwitchToMain(bool isRestart)
         {
             machine.FireAsync(startMenuTrigger, isRestart);
         }
@@ -91,7 +98,7 @@ namespace JFrame.Game.HotUpdate
         private void OnTransition(StateMachine<SceneBaseState, Trigger>.Transition obj)
         {
             Debug.Log("OnTransition " + obj.Source + " / " + obj.Destination);
-            onStateChanged?.Invoke(obj.Source, obj.Destination);
+            onSceneTransition?.Invoke(obj.Source, obj.Destination);
         }
 
         /// <summary>
@@ -99,9 +106,10 @@ namespace JFrame.Game.HotUpdate
         /// </summary>
         /// <param name="state"></param>
         /// <param name="playerAccount"></param>
-        private UniTask OnEnterGame(BattleSceneState state, PlayerAccount playerAccount)
+        private async UniTask OnEnterBattle(BattleSceneState state, PlayerAccount playerAccount)
         {
-            return state.OnEnter(playerAccount);
+            await state.OnEnter(playerAccount);
+            onSceneEnter?.Invoke(state);
         }
 
         /// <summary>
@@ -109,11 +117,22 @@ namespace JFrame.Game.HotUpdate
         /// </summary>
         /// <param name="state"></param>
         /// <param name="isRestart"></param>
-        private UniTask OnEnterMenu(MenuSceneState state, bool isRestart)
+        private async UniTask OnEnterMain(MainSceneState state, bool isRestart)
         {
-            return state.OnEnter(isRestart);
+            await state.OnEnter(isRestart);
+            onSceneEnter?.Invoke(state); 
         }
 
+        /// <summary>
+        /// 推出菜单场景状态机了
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        private async UniTask OnExitMain(MainSceneState state)
+        {
+            await state.OnExit();
+            onSceneExit?.Invoke(state);
+        }
 
     }
 }

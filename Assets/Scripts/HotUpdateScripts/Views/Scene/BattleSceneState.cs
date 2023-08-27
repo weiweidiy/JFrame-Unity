@@ -1,9 +1,10 @@
 ﻿using Adic;
 using Cysharp.Threading.Tasks;
 using JFrame.Common;
+using JFrame.Game.Model;
 using UnityEngine;
 
-namespace JFrame.Game.HotUpdate
+namespace JFrame.Game.View
 {
     public class BattleSceneState : SceneBaseState
     {

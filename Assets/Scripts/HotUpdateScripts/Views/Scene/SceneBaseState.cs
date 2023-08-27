@@ -1,4 +1,4 @@
-﻿namespace JFrame.Game.HotUpdate
+﻿namespace JFrame.Game.View
 {
     public abstract class SceneBaseState
     {

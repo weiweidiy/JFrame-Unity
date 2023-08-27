@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace JFrame.Game.HotUpdate
+namespace JFrame.Game.View
 {
     public class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
     {
