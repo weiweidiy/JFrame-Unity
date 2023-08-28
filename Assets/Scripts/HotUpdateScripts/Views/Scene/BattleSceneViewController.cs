@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace JFrame.Game.View
 {
-    public class BattleUIController : UIController
+    public class BattleSceneViewController : ViewController
     {
         [Inject]
         SceneController sceneController;
@@ -19,18 +19,20 @@ namespace JFrame.Game.View
             sceneController.onSceneEnter += SceneController_onSceneEnter;
         }
 
-        public override UniTask Open()
-        {
-            Debug.Log("battle ui run 初始化battle ui" + playerAccount.Account);
-            return UniTask.DelayFrame(1);
-        }
-
-        private void SceneController_onSceneEnter(string scene)
+        private async void SceneController_onSceneEnter(string scene)
         {
             if (!scene.Equals("Battle"))
                 return;
 
-            Open();
+            await Show();
         }
+
+        protected override UniTask DoShow()
+        {
+            Debug.Log("battle ui run 初始化battle ui" + playerAccount.Account);
+            return UniTask.DelayFrame(300);
+        }
+
+
     }
 }

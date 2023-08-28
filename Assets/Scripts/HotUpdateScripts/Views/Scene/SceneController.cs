@@ -1,9 +1,11 @@
 ﻿
 using Adic;
+using Cysharp.Threading.Tasks;
 using JFrame.Common;
 using JFrame.Game.Models;
 using Stateless;
 using System;
+using System.Security.Principal;
 using UnityEngine;
 
 namespace JFrame.Game.View
@@ -17,10 +19,6 @@ namespace JFrame.Game.View
         [Inject]
         SceneSM sm;
 
-        [Inject]
-        ITransitionProvider transitionProvider;
-
-        ITransition transition;
 
         [Inject]
         void Init()
@@ -38,61 +36,54 @@ namespace JFrame.Game.View
         /// </summary>
         public void Run()
         {
-            SwitchToMain(false);
+            Switch("Main");
         }
 
-        /// <summary>
-        /// 开始菜单
-        /// </summary>
-        /// <param name="isRestart"></param>
-        public async void SwitchToMain(bool isRestart , string transitionName = "")
+        public UniTask Switch(string sceneName)
         {
-            //切换场景
-            Debug.Log("ToMain");
-            if(isRestart && transitionName != "")
+            switch(sceneName)
             {
-                transition = await transitionProvider.InstantiateAsync(transitionName);
-                await transition.TransitionOut();
-                sm.SwitchToMain(isRestart);
+                case "Main":
+                    return sm.SwitchToMain();
+                    
+                case "Battle":
+                    return sm.SwitchToBattle();
+
+                default:
+                    return UniTask.DelayFrame(1);
             }
-            else
-            {
-                sm.SwitchToMain(isRestart);
-            }         
         }
 
-        /// <summary>
-        /// 开始游戏
-        /// </summary>
-        public async void SwitchToBattle(PlayerAccount account, string transitionName = "")
-        {
-            //切换场景
-            Debug.Log("ToBattle");
-            if(transitionName != "")
-            {
-                transition = await transitionProvider.InstantiateAsync(transitionName);
-                await transition.TransitionOut();
-                sm.SwitchToBattle(account);
-            }
-            else
-            {
-                sm.SwitchToBattle(account);
-            }
-            
-        }
+        ///// <summary>
+        ///// 开始菜单
+        ///// </summary>
+        ///// <param name="isRestart"></param>
+        //public void SwitchToMain(bool isRestart, string transitionName = "")
+        //{
+        //    //切换场景
+        //    Debug.Log("ToMain");
+        //    sm.SwitchToMain(isRestart);
+        //}
+
+        ///// <summary>
+        ///// 开始游戏
+        ///// </summary>
+        //public void SwitchToBattle(PlayerAccount account)
+        //{
+        //    //切换场景
+        //    Debug.Log("ToBattle");
+        //    sm.SwitchToBattle(account);
+        //}
 
 
-        void OnSceneTransitioned(SceneBaseState source , SceneBaseState target)
+        void OnSceneTransitioned(SceneBaseState source, SceneBaseState target)
         {
             onSceneTransition?.Invoke(source.Name, target.Name);
             Debug.Log("OnStateChanged" + target.Name);
         }
 
-        private async void OnSceneEnter(SceneBaseState scene)
+        private void OnSceneEnter(SceneBaseState scene)
         {
-            if(transition != null)
-                await transition.TransitionIn();
-
             onSceneEnter?.Invoke(scene.Name);
         }
 

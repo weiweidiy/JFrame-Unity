@@ -12,6 +12,9 @@ public class TestButton : MonoBehaviour
     SceneController controller;
 
     [Inject]
+    SceneTransitionController tController;
+
+    [Inject]
     PlayerAccount account;
     // Start is called before the first frame update
     void Start()
@@ -21,7 +24,7 @@ public class TestButton : MonoBehaviour
         var btn = GetComponent<Button>();
         btn.onClick.AddListener(() =>
         {
-            controller.SwitchToBattle(account, "SMFadeTransition");
+            tController.TransitionToScene("Battle");
         });
     }
 

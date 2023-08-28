@@ -14,21 +14,20 @@ namespace JFrame.Game.View
 
         [Inject]
         IAssetsLoader assetLoader;
+
+        bool isFirst = true;
         
-        internal async UniTask OnEnter(bool isRestart)
+        internal async UniTask OnEnter()
         {
-            Debug.Log("MainState OnEnter " + isRestart);
             Debug.Assert(Owner != null, "owner is null");
-            if(isRestart)
-            {
-                var scene = await assetLoader.LoadSceneAsync(Name);
-            }
-            else
-            {
-                //Debug.Log("加载menu");
-                await UniTask.DelayFrame(1);
-            }
-                
+
+            if (isFirst)
+                return;
+
+            var scene = await assetLoader.LoadSceneAsync(Name);
+
+            isFirst = false;
+
         }
 
         internal UniTask OnExit()

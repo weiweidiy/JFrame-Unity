@@ -23,8 +23,8 @@ namespace JFrame.Game.View
         }
 
         StateMachine<SceneBaseState, Trigger> machine;
-        StateMachine<SceneBaseState, Trigger>.TriggerWithParameters<bool> startMenuTrigger;
-        StateMachine<SceneBaseState, Trigger>.TriggerWithParameters<PlayerAccount> startGameTrigger;
+        //StateMachine<SceneBaseState, Trigger>.TriggerWithParameters<bool> startMenuTrigger;
+        //StateMachine<SceneBaseState, Trigger>.TriggerWithParameters<PlayerAccount> startGameTrigger;
 
         [Inject]
         IInjectionContainer container;
@@ -52,20 +52,20 @@ namespace JFrame.Game.View
 
             //配置游戏状态机
             machine = new StateMachine<SceneBaseState, Trigger>(initState/*() => _state, s => _state = s*/);
-            startMenuTrigger = machine.SetTriggerParameters<bool>(Trigger.StartMenu);
-            startGameTrigger = machine.SetTriggerParameters<PlayerAccount>(Trigger.StartGame);
+            //startMenuTrigger = machine.SetTriggerParameters<bool>(Trigger.StartMenu);
+            //startGameTrigger = machine.SetTriggerParameters<PlayerAccount>(Trigger.StartGame);
 
             machine.Configure(initState)
                 .Permit(Trigger.StartMenu, menuState)
                 .Permit(Trigger.StartGame, gameState);
 
             machine.Configure(menuState)
-                .OnEntryFromAsync(startMenuTrigger, async (isRestart) => { await OnEnterMain(menuState, isRestart); })
+                .OnEntryAsync( async () => { await OnEnterMain(menuState); })
                 .OnExitAsync( async () => { await OnExitMain(menuState); })
                 .Permit(Trigger.StartGame, gameState);
 
             machine.Configure(gameState)
-                .OnEntryFromAsync(startGameTrigger, async (playerAccount) => { await OnEnterBattle(gameState, playerAccount); })
+                .OnEntryAsync(async () => { await OnEnterBattle(gameState); })
                 .Permit(Trigger.StartMenu, menuState);
 
             machine.OnTransitioned(OnTransition);
@@ -76,18 +76,18 @@ namespace JFrame.Game.View
         /// <summary>
         /// 切换到游戏状态
         /// </summary>
-        public void SwitchToBattle(PlayerAccount account)
+        public UniTask SwitchToBattle()
         {
-            machine.FireAsync(startGameTrigger, account);
+            return machine.FireAsync(Trigger.StartGame);
         }
 
         /// <summary>
         /// 切换到菜单状态
         /// </summary>
         /// <param name="isRestart"></param>
-        public void SwitchToMain(bool isRestart)
+        public UniTask SwitchToMain()
         {
-            machine.FireAsync(startMenuTrigger, isRestart);
+            return machine.FireAsync(Trigger.StartMenu);
         }
 
 
@@ -106,9 +106,9 @@ namespace JFrame.Game.View
         /// </summary>
         /// <param name="state"></param>
         /// <param name="playerAccount"></param>
-        private async UniTask OnEnterBattle(BattleSceneState state, PlayerAccount playerAccount)
+        private async UniTask OnEnterBattle(BattleSceneState state)
         {
-            await state.OnEnter(playerAccount);
+            await state.OnEnter();
             onSceneEnter?.Invoke(state);
         }
 
@@ -117,9 +117,9 @@ namespace JFrame.Game.View
         /// </summary>
         /// <param name="state"></param>
         /// <param name="isRestart"></param>
-        private async UniTask OnEnterMain(MainSceneState state, bool isRestart)
+        private async UniTask OnEnterMain(MainSceneState state)
         {
-            await state.OnEnter(isRestart);
+            await state.OnEnter();
             onSceneEnter?.Invoke(state); 
         }
 

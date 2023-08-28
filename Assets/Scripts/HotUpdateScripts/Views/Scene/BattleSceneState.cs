@@ -15,9 +15,9 @@ namespace JFrame.Game.View
 
         public override string Name => "Battle";
 
-        internal async UniTask OnEnter(PlayerAccount playerAccount)
+        internal async UniTask OnEnter()
         {
-            Debug.Log("BattleState OnEnter " + playerAccount.Account);
+            //Debug.Log("BattleState OnEnter " + playerAccount.Account);
             var scene = await assetLoader.LoadSceneAsync(Name);
         }
     }
