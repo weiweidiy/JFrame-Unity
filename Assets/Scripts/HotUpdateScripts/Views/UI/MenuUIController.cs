@@ -18,5 +18,7 @@ namespace JFrame.Game.View
             var menu = await assetLoader.InstantiateAsync("Menu");
             playerAccount.Account = "Jichunwei";
         }
+
+
     }
 }

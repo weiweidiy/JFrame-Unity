@@ -23,7 +23,7 @@ namespace JFrame.Game.View
 
             await sceneController.Switch(sceneName);
 
-            sceneController.onSceneViewCompleted += OnViewCompleted;
+            sceneController.onSceneViewLoadedCompleted += OnViewCompleted;
 
         }
 
@@ -31,7 +31,7 @@ namespace JFrame.Game.View
         {
             await transition.TransitionIn();
 
-            sceneController.onSceneViewCompleted -= OnViewCompleted;
+            sceneController.onSceneViewLoadedCompleted -= OnViewCompleted;
         }
 
 

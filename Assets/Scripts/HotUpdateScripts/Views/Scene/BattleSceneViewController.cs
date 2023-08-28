@@ -10,11 +10,6 @@ namespace JFrame.Game.View
         [Inject]
         PlayerAccount playerAccount;
 
-        [Inject]
-        void Init()
-        {
-        }
-
 
         protected override UniTask DoShow()
         {

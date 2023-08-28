@@ -15,13 +15,17 @@ namespace JFrame.Game.View
         [Inject]
         IInjectionContainer container;
 
+        /// <summary>
+        /// 菜单视图控制器
+        /// </summary>
         [Inject]
         MenuUIController menuController;
 
-        [Inject]
-        void Init()
+
+        protected override void Init()
         {
-            container.Bind<MenuUIController>().ToSingleton();   
+            base.Init();
+            container.Bind<MenuUIController>().ToSingleton();
         }
 
         protected override async UniTask DoShow()
