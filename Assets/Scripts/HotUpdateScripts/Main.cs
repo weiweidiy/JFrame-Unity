@@ -40,18 +40,23 @@ namespace JFrame.Game
             container = AddContainer<InjectionContainer>()
                 .RegisterExtension<UnityBindingContainerExtension>()
                 .RegisterExtension<CommanderContainerExtension>();
-                
+
+
+
+            //绑定通用逻辑
+            container.Bind<IAssetsLoader>().ToSingleton<YooAssetsLoader>();
+            container.Bind<ITransitionProvider>().ToSingleton<SMTransitionProvider>();
 
             //绑定模型
             container.Bind<PlayerAccount>().ToSingleton();
 
-            //绑定通用逻辑
-            container.Bind<IAssetsLoader>().ToSingleton<YooAssetsLoader>();
+            //绑定系统
 
-            //绑定业务逻辑
+
+            //绑定视图controller
             container.Bind<SceneSM>().ToSingleton();
             container.Bind<SceneController>().ToSingleton();
-            container.Bind<UIController>().ToSingleton<MenuUIController>();
+            container.Bind<UIController>().ToSingleton<MainSceneController>();
             container.Bind<UIController>().ToSingleton<BattleUIController>();
 
 

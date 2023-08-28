@@ -6,7 +6,16 @@ using UnityEngine;
 
 namespace JFrame.Game.View
 {
-    public class MenuUIController : UIController
+    //public class MainSceneControllers : UIController
+    //{
+    //    public override UniTask Open()
+    //    {
+    //        throw new System.NotImplementedException();
+    //    }
+    //}
+
+
+    public class MainSceneController : UIController
     {
         [Inject]
         SceneController sceneController;
@@ -23,11 +32,11 @@ namespace JFrame.Game.View
             sceneController.onSceneEnter += SceneController_onSceneEnter;
         }
 
-        public override async UniTask Run()
+        public override async UniTask Open()
         {
             Debug.Log("Main ui run 初始化main ui");
             //创建panel等ui
-            var menu = assetLoader.Instantiate("Menu");
+            var menu = assetLoader.InstantiateAsync("Menu");
             playerAccount.Account = "Jichunwei";
             await UniTask.DelayFrame(1);
         }
@@ -37,7 +46,7 @@ namespace JFrame.Game.View
             if (!scene.Equals("Main"))
                 return;
 
-            await Run();
+            await Open();
         }
     }
 }

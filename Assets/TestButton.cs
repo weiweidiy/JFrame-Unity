@@ -21,7 +21,7 @@ public class TestButton : MonoBehaviour
         var btn = GetComponent<Button>();
         btn.onClick.AddListener(() =>
         {
-            controller.SwitchToBattle(account);
+            controller.SwitchToBattle(account, "SMFadeTransition");
         });
     }
 

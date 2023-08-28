@@ -9,7 +9,7 @@ namespace JFrame.Common
 
     public class YooAssetsLoader : IAssetsLoader
     {
-        public async UniTask<GameObject> Instantiate(string location)
+        public async UniTask<GameObject> InstantiateAsync(string location)
         {
             var handle = YooAssets.LoadAssetAsync<GameObject>(location);
             await handle.ToUniTask();

@@ -8,7 +8,7 @@ namespace JFrame.Common
     {
         UniTask<Scene> LoadSceneAsync(string sceneName);
 
-        UniTask<GameObject> Instantiate(string location);
+        UniTask<GameObject> InstantiateAsync(string location);
     }
 }
 

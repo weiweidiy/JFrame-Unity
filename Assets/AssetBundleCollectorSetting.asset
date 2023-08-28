@@ -74,3 +74,16 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+    - GroupName: SceneTransition
+      GroupDesc: "\u573A\u666F\u8FC7\u573A\u52A8\u753B"
+      AssetTags: SceneTransition
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Scripts/HotUpdateScripts/Common/SceneTransition/Prefabs
+        CollectorGUID: 8ae6077fe6353ed4ca8d4b180d8d9df6
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 

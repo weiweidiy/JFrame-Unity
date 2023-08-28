@@ -4,6 +4,6 @@ namespace JFrame.Game.View
 {
     public abstract class UIController
     {
-        public abstract UniTask Run();
+        public abstract UniTask Open();
     }
 }

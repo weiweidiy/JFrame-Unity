@@ -19,7 +19,7 @@ namespace JFrame.Game.View
             sceneController.onSceneEnter += SceneController_onSceneEnter;
         }
 
-        public override UniTask Run()
+        public override UniTask Open()
         {
             Debug.Log("battle ui run 初始化battle ui" + playerAccount.Account);
             return UniTask.DelayFrame(1);
@@ -30,7 +30,7 @@ namespace JFrame.Game.View
             if (!scene.Equals("Battle"))
                 return;
 
-            Run();
+            Open();
         }
     }
 }

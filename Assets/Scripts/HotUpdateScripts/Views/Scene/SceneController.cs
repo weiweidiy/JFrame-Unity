@@ -1,5 +1,6 @@
 ﻿
 using Adic;
+using JFrame.Common;
 using JFrame.Game.Models;
 using Stateless;
 using System;
@@ -17,11 +18,16 @@ namespace JFrame.Game.View
         SceneSM sm;
 
         [Inject]
+        ITransitionProvider transitionProvider;
+
+        ITransition transition;
+
+        [Inject]
         void Init()
         {
             Debug.Log("GameManager init");
             sm.Initialize(this);
-            sm.onSceneTransition += OnStateChanged;
+            sm.onSceneTransition += OnSceneTransitioned;
             sm.onSceneEnter += OnSceneEnter;
             sm.onSceneExit += OnSceneExit;
         }
@@ -39,32 +45,54 @@ namespace JFrame.Game.View
         /// 开始菜单
         /// </summary>
         /// <param name="isRestart"></param>
-        public void SwitchToMain(bool isRestart)
+        public async void SwitchToMain(bool isRestart , string transitionName = "")
         {
             //切换场景
             Debug.Log("ToMain");
-            sm.SwitchToMain(isRestart);
+            if(isRestart && transitionName != "")
+            {
+                transition = await transitionProvider.InstantiateAsync(transitionName);
+                await transition.TransitionOut();
+                sm.SwitchToMain(isRestart);
+            }
+            else
+            {
+                sm.SwitchToMain(isRestart);
+            }         
         }
 
         /// <summary>
         /// 开始游戏
         /// </summary>
-        public void SwitchToBattle(PlayerAccount account)
+        public async void SwitchToBattle(PlayerAccount account, string transitionName = "")
         {
             //切换场景
             Debug.Log("ToBattle");
-            sm.SwitchToBattle(account);
+            if(transitionName != "")
+            {
+                transition = await transitionProvider.InstantiateAsync(transitionName);
+                await transition.TransitionOut();
+                sm.SwitchToBattle(account);
+            }
+            else
+            {
+                sm.SwitchToBattle(account);
+            }
+            
         }
 
 
-        void OnStateChanged(SceneBaseState source , SceneBaseState target)
+        void OnSceneTransitioned(SceneBaseState source , SceneBaseState target)
         {
             onSceneTransition?.Invoke(source.Name, target.Name);
             Debug.Log("OnStateChanged" + target.Name);
         }
 
-        private void OnSceneEnter(SceneBaseState scene)
+        private async void OnSceneEnter(SceneBaseState scene)
         {
+            if(transition != null)
+                await transition.TransitionIn();
+
             onSceneEnter?.Invoke(scene.Name);
         }
 
