@@ -56,8 +56,7 @@ namespace JFrame.Game
             //绑定视图controller
             container.Bind<SceneSM>().ToSingleton();
             container.Bind<SceneController>().ToSingleton();
-            container.Bind<ViewController>().ToSingleton<MainSceneViewController>();
-            container.Bind<ViewController>().ToSingleton<BattleSceneViewController>();
+
 
             container.Bind<SceneTransitionController>().ToSingleton();
 

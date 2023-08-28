@@ -24,7 +24,7 @@ public class TestButton : MonoBehaviour
         var btn = GetComponent<Button>();
         btn.onClick.AddListener(() =>
         {
-            tController.TransitionToScene("Battle");
+            tController.TransitionToScene("Battle", "SMFadeTransition");
         });
     }
 

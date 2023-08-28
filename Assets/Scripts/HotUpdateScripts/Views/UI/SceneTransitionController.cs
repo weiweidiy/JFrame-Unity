@@ -12,42 +12,28 @@ namespace JFrame.Game.View
         [Inject]
         SceneController sceneController;
 
-        [Inject]
-        IInjectionContainer container;
 
         ITransition transition;
 
-        ViewController ui;
 
-        public async void TransitionToScene(string sceneName)
+        public async void TransitionToScene(string sceneName, string transitionType)
         {
-            transition = await transitionProvider.InstantiateAsync("SMFadeTransition");
+            transition = await transitionProvider.InstantiateAsync(transitionType);
             await transition.TransitionOut();
 
             await sceneController.Switch(sceneName);
 
-            ui = GetSceneUIController(sceneName);
-            ui.onEnterCompleted += SceneUI_onEnterCompleted;
+            sceneController.onSceneViewCompleted += OnViewCompleted;
+
         }
 
-        private async void SceneUI_onEnterCompleted(ViewController obj)
+        private async void OnViewCompleted()
         {
             await transition.TransitionIn();
 
-            ui.onEnterCompleted -= SceneUI_onEnterCompleted;
+            sceneController.onSceneViewCompleted -= OnViewCompleted;
         }
 
-        ViewController GetSceneUIController(string sceneName)
-        {
-            switch(sceneName)
-            {
-                case "Main":
-                    return container.Resolve<MainSceneViewController>();
-                case "Battle":
-                    return container.Resolve<BattleSceneViewController>();
-                default:
-                    return null;
-            }
-        }
+
     }
 }

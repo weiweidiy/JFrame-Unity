@@ -16,24 +16,12 @@ namespace JFrame.Game.View
         IInjectionContainer container;
 
         [Inject]
-        SceneController sceneController;
-
-        [Inject]
         MenuUIController menuController;
 
         [Inject]
         void Init()
         {
-            container.Bind<MenuUIController>().ToSingleton();
-            sceneController.onSceneEnter += OnSceneEnter;    
-        }
-
-        private async void OnSceneEnter(string scene)
-        {
-            if (!scene.Equals("Main"))
-                return;
-
-            await Show();
+            container.Bind<MenuUIController>().ToSingleton();   
         }
 
         protected override async UniTask DoShow()

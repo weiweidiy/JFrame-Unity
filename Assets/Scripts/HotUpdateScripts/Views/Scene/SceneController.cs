@@ -1,5 +1,6 @@
 ﻿
 using Adic;
+using Adic.Container;
 using Cysharp.Threading.Tasks;
 using JFrame.Common;
 using JFrame.Game.Models;
@@ -16,9 +17,13 @@ namespace JFrame.Game.View
         public event Action<string> onSceneEnter;
         public event Action<string> onSceneExit;
 
+        public event Action onSceneViewCompleted;
+
         [Inject]
         SceneSM sm;
 
+        [Inject]
+        IInjectionContainer container;
 
         [Inject]
         void Init()
@@ -28,6 +33,8 @@ namespace JFrame.Game.View
             sm.onSceneTransition += OnSceneTransitioned;
             sm.onSceneEnter += OnSceneEnter;
             sm.onSceneExit += OnSceneExit;
+
+
         }
 
 
@@ -36,44 +43,26 @@ namespace JFrame.Game.View
         /// </summary>
         public void Run()
         {
-            Switch("Main");
+            container.Bind<MainSceneViewController>().ToSingleton();
+            container.Bind<BattleSceneViewController>().ToSingleton();
+
+            Switch(GameDefine.SCENE_MAIN);
         }
 
         public UniTask Switch(string sceneName)
         {
             switch(sceneName)
             {
-                case "Main":
+                case GameDefine.SCENE_MAIN:
                     return sm.SwitchToMain();
                     
-                case "Battle":
+                case GameDefine.SCENE_BATTLE:
                     return sm.SwitchToBattle();
 
                 default:
                     return UniTask.DelayFrame(1);
             }
         }
-
-        ///// <summary>
-        ///// 开始菜单
-        ///// </summary>
-        ///// <param name="isRestart"></param>
-        //public void SwitchToMain(bool isRestart, string transitionName = "")
-        //{
-        //    //切换场景
-        //    Debug.Log("ToMain");
-        //    sm.SwitchToMain(isRestart);
-        //}
-
-        ///// <summary>
-        ///// 开始游戏
-        ///// </summary>
-        //public void SwitchToBattle(PlayerAccount account)
-        //{
-        //    //切换场景
-        //    Debug.Log("ToBattle");
-        //    sm.SwitchToBattle(account);
-        //}
 
 
         void OnSceneTransitioned(SceneBaseState source, SceneBaseState target)
@@ -82,14 +71,31 @@ namespace JFrame.Game.View
             Debug.Log("OnStateChanged" + target.Name);
         }
 
-        private void OnSceneEnter(SceneBaseState scene)
+        private async void OnSceneEnter(SceneBaseState scene)
         {
             onSceneEnter?.Invoke(scene.Name);
+
+            var sceneView = GetSceneUIController(scene.Name);
+            await sceneView.Show();
+            onSceneViewCompleted?.Invoke();
         }
 
         private void OnSceneExit(SceneBaseState scene)
         {
             onSceneExit?.Invoke(scene.Name);
+        }
+
+        ViewController GetSceneUIController(string sceneName)
+        {
+            switch (sceneName)
+            {
+                case GameDefine.SCENE_MAIN:
+                    return container.Resolve<MainSceneViewController>();
+                case GameDefine.SCENE_BATTLE:
+                    return container.Resolve<BattleSceneViewController>();
+                default:
+                    return null;
+            }
         }
     }
 }
