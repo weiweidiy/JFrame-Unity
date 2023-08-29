@@ -46,6 +46,7 @@ namespace JFrame.Game
             //绑定通用逻辑
             container.Bind<IAssetsLoader>().ToSingleton<YooAssetsLoader>();
             container.Bind<ITransitionProvider>().ToSingleton<SMTransitionProvider>();
+            container.Bind<UIManager>().ToSingleton();
 
             //绑定模型
             container.Bind<PlayerAccount>().ToSingleton();
@@ -56,9 +57,8 @@ namespace JFrame.Game
             //绑定视图controller
             container.Bind<SceneSM>().ToSingleton();
             container.Bind<SceneController>().ToSingleton();
-
-
             container.Bind<SceneTransitionController>().ToSingleton();
+            
 
 
 

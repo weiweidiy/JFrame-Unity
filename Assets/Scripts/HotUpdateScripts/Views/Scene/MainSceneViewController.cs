@@ -21,6 +21,8 @@ namespace JFrame.Game.View
         [Inject]
         MenuUIController menuController;
 
+        [Inject]
+        UIManager uiManager;
 
         protected override void Init()
         {
@@ -31,6 +33,7 @@ namespace JFrame.Game.View
         protected override async UniTask DoShow()
         {
             Debug.Log("Main ui run 初始化main ui");
+            await uiManager.Initialize();
             await menuController.Show();
         }
     }

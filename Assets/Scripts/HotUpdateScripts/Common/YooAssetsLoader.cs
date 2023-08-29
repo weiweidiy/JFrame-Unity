@@ -18,6 +18,13 @@ namespace JFrame.Common
             return h.Result;
         }
 
+        public async UniTask<T> LoadAssetAsync<T>(string location) where T : UnityEngine.Object
+        {
+            var handle = YooAssets.LoadAssetAsync<T>(location);
+            await handle;
+            return handle.AssetObject as T;
+        }
+
         public async UniTask<Scene> LoadSceneAsync(string sceneName)
         {
             var handle = YooAssets.LoadSceneAsync(sceneName);

@@ -13,10 +13,16 @@ namespace JFrame.Game.View
         [Inject]
         IAssetsLoader assetLoader;
 
-        protected override async UniTask DoShow()
+        [Inject]
+        UIManager uiManager;
+
+        protected override UniTask DoShow()
         {
-            var menu = await assetLoader.InstantiateAsync("Menu");
+            uiManager.ShowPanel("BtnStart");
+
             playerAccount.Account = "Jichunwei";
+
+            return UniTask.DelayFrame(1);
         }
     }
 }
