@@ -29,7 +29,7 @@ namespace JFrame.Game.Package
         /// <exception cref="NotImplementedException"></exception>
         private async UniTask<bool> PlaySplash()
         {
-            await UniTask.Delay(3000);
+            await UniTask.Delay(1000);
             return true;
         }
 

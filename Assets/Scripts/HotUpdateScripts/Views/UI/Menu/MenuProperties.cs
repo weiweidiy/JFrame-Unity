@@ -1,9 +1,10 @@
 ﻿using deVoid.UIFramework;
+using System;
 
 namespace JFrame.Game.View
 {
-    public class MenuProperties : IPanelProperties
+    public class MenuProperties : PanelProperties
     {
-        public PanelPriority Priority { get => PanelPriority.Prioritary; set => throw new System.NotImplementedException(); }
+        public Action onClicked;
     }
 }

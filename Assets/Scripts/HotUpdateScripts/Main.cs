@@ -64,6 +64,7 @@ namespace JFrame.Game
 
             //绑定命令
             container.RegisterCommand<RunGame>();
+            container.RegisterCommand<StartBattle>();
 
 
         }

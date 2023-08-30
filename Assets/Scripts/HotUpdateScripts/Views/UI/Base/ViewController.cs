@@ -1,6 +1,7 @@
 using Adic;
 using Cysharp.Threading.Tasks;
 using System;
+using UnityEngine;
 
 namespace JFrame.Game.View
 {
@@ -14,7 +15,6 @@ namespace JFrame.Game.View
         [Inject]
         protected virtual void Init()
         {
-
         }
 
         /// <summary>

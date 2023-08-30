@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using deVoid.UIFramework;
 using JFrame.Common;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 using static UnityEditor.Rendering.Universal.ShaderGUI.LitGUI;
 
@@ -25,6 +26,7 @@ namespace JFrame.Game.View
         {
             var uiSetting = await assetsLoader.LoadAssetAsync<UISettings>("UISettings");
             uiFrame = uiSetting.CreateUIInstance();
+            Camera.main.GetUniversalAdditionalCameraData().cameraStack.Add(uiFrame.UICamera);
         }
 
         /// <summary>

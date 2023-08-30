@@ -15,18 +15,11 @@ namespace JFrame.Game.View
         [Inject]
         IInjectionContainer container;
 
-        /// <summary>
-        /// 菜单视图控制器
-        /// </summary>
-        [Inject]
-        MenuUIController menuController;
-
         [Inject]
         UIManager uiManager;
 
         protected override void Init()
         {
-            base.Init();
             container.Bind<MenuUIController>().ToSingleton();
         }
 
@@ -34,7 +27,7 @@ namespace JFrame.Game.View
         {
             Debug.Log("Main ui run 初始化main ui");
             await uiManager.Initialize();
-            await menuController.Show();
+            await container.Resolve<MenuUIController>().Show();
         }
     }
 }

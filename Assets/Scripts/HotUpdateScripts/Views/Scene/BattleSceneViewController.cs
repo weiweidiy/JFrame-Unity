@@ -14,7 +14,7 @@ namespace JFrame.Game.View
         protected override UniTask DoShow()
         {
             Debug.Log("battle ui run 初始化battle ui" + playerAccount.Account);
-            return UniTask.DelayFrame(300);
+            return UniTask.DelayFrame(1);
         }
 
 

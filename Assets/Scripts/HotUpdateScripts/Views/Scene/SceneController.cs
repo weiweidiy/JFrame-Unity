@@ -69,7 +69,7 @@ namespace JFrame.Game.View
             container.Bind<MainSceneViewController>().ToSingleton();
             container.Bind<BattleSceneViewController>().ToSingleton();
 
-            Switch(GameDefine.SCENE_MAIN);
+            Switch(Scene.MAIN);
         }
 
         /// <summary>
@@ -81,10 +81,10 @@ namespace JFrame.Game.View
         {
             switch(sceneName)
             {
-                case GameDefine.SCENE_MAIN:
+                case Scene.MAIN:
                     return sm.SwitchToMain();
                     
-                case GameDefine.SCENE_BATTLE:
+                case Scene.BATTLE:
                     return sm.SwitchToBattle();
 
                 default:
@@ -136,9 +136,9 @@ namespace JFrame.Game.View
         {
             switch (sceneName)
             {
-                case GameDefine.SCENE_MAIN:
+                case Scene.MAIN:
                     return container.Resolve<MainSceneViewController>();
-                case GameDefine.SCENE_BATTLE:
+                case Scene.BATTLE:
                     return container.Resolve<BattleSceneViewController>();
                 default:
                     return null;

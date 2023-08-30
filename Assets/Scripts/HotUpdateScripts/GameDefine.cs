@@ -4,10 +4,15 @@ using UnityEngine;
 
 namespace JFrame.Game
 {
-    public class GameDefine
+    public class Scene
     {
-        public const string SCENE_MAIN = "Main";
-        public const string SCENE_BATTLE = "Battle";
+        public const string MAIN = "Main";
+        public const string BATTLE = "Battle";
+    }
+
+    public class SceneTransition
+    {
+        public const string FADE = "SMFadeTransition";
     }
 
 }

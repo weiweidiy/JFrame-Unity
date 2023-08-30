@@ -16,18 +16,6 @@ namespace JFrame.Game.Commands
             sceneController.Run();
         }
     }
-
-
-    public class StartBattle : Command
-    {
-        [Inject]
-        SceneController sceneController;
-
-        public override void Execute(params object[] parameters)
-        {
-            
-        }
-    }
 }
 
 
