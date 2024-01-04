@@ -22,12 +22,12 @@ namespace JFrame.Common
     }
 
 
-    public class UnSubScriberRedDot : IDisposable
+    public class UnSubScriberProd : IDisposable
     {
-        private List<RedDotObserver> _observers;
-        private RedDotObserver _observer;
+        private List<ProdObserver> _observers;
+        private ProdObserver _observer;
 
-        internal UnSubScriberRedDot(List<RedDotObserver> observers, RedDotObserver observer)
+        internal UnSubScriberProd(List<ProdObserver> observers, ProdObserver observer)
         {
             this._observers = observers;
             this._observer = observer;
@@ -39,7 +39,7 @@ namespace JFrame.Common
                 _observers.Remove(_observer);
         }
 
-        public bool HasAction(Action<string, RedDotInfo, string> action)
+        public bool HasAction(Action<string, ProdInfo, string> action)
         {
             return this._observer.HasAction(action);
         }

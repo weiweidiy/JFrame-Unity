@@ -10,17 +10,17 @@ namespace JFrame.Common
     /// 负责监视数据的状态变化
     /// 负责监视事件的通知
     /// </summary>
-    public abstract class RedDotManager 
+    public abstract class ProdManager 
     {   
         /// <summary>
         /// 红点逻辑映射
         /// </summary>
-        protected Dictionary<string, IObservable<RedDotInfo>> mapObservables;
+        protected Dictionary<string, IObservable<ProdInfo>> mapObservables;
 
         /// <summary>
         /// 红点观察者列表，用于反注册
         /// </summary>
-        protected Dictionary<string, List<UnSubScriberRedDot>> mapObservers;
+        protected Dictionary<string, List<UnSubScriberProd>> mapObservers;
 
 
         /// <summary>
@@ -28,23 +28,25 @@ namespace JFrame.Common
         /// </summary>
         public void Init()
         {
-            mapObservables = new Dictionary<string, IObservable<RedDotInfo>>();
-            mapObservers = new Dictionary<string, List<UnSubScriberRedDot>>();
-
-            OnInit();
+            mapObservables = GetProdLogic();
+            mapObservers = new Dictionary<string, List<UnSubScriberProd>>();  
         }
 
-        protected abstract void OnInit();
+        /// <summary>
+        /// 获取所有红点逻辑
+        /// </summary>
+        /// <returns></returns>
+        protected abstract Dictionary<string, IObservable<ProdInfo>> GetProdLogic();
 
         /// <summary>
         /// 注册观察者
         /// </summary>
         /// <param name="key"></param>
         /// <param name="action"></param>
-        public void Regist(string key, Action<string, RedDotInfo, string> action, string uid)
+        public void Regist(string key, Action<string, ProdInfo, string> action, string uid)
         {
             //创建一个观察者
-            var observer = new RedDotObserver(key, action, uid);
+            var observer = new ProdObserver(key, action, uid);
 
             //订阅指定类型的红点事件
             var unsubscribe = mapObservables[key].Subscribe(observer);
@@ -52,16 +54,16 @@ namespace JFrame.Common
             //缓存指定类型订阅者
             if(!mapObservers.ContainsKey(key))
             {
-                mapObservers.Add(key, new List<UnSubScriberRedDot>());
+                mapObservers.Add(key, new List<UnSubScriberProd>());
             }
 
-            if (mapObservers[key].Contains(unsubscribe as UnSubScriberRedDot))
+            if (mapObservers[key].Contains(unsubscribe as UnSubScriberProd))
             {
                 Debug.LogError("不能重复注册观察者 ");
                 return;
             }
 
-            mapObservers[key].Add(unsubscribe as UnSubScriberRedDot);
+            mapObservers[key].Add(unsubscribe as UnSubScriberProd);
           
         }
 
@@ -70,7 +72,7 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="key"></param>
         /// <param name="action"></param>
-        public void UnRegist(string key, Action<string, RedDotInfo, string> action)
+        public void UnRegist(string key, Action<string, ProdInfo, string> action)
         {
             if (!mapObservers.ContainsKey(key))
             {

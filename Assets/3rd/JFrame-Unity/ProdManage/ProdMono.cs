@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace JFrame.Common
 {
-    public abstract class RedDotMono : MonoBehaviour
+    public abstract class ProdMono : MonoBehaviour
     {
         [SerializeField] Image img;
         [SerializeField] protected TextMeshProUGUI txt;
@@ -14,7 +14,7 @@ namespace JFrame.Common
         /// <summary>
         /// 红点类型对应的资源
         /// </summary>
-        [SerializeField] Sprite[] redDots; // 0 normal, 1 new, 2 full, 3 ad 
+        [SerializeField] Sprite[] prods; // 0 normal, 1 new, 2 full, 3 ad 
 
         /// <summary>
         /// 是否初始化过
@@ -51,7 +51,7 @@ namespace JFrame.Common
         /// 子类提供
         /// </summary>
         /// <returns></returns>
-        protected abstract RedDotManager GetRedDotManager();
+        protected abstract ProdManager GetProdManager();
 
         /// <summary>
         /// 获取感兴趣的红点配置
@@ -64,7 +64,7 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        protected abstract int GetSpriteIndex(RedDotInfo info);
+        protected abstract int GetSpriteIndex(ProdInfo info);
 
 
         /// <summary>
@@ -72,9 +72,9 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="showInfo"></param>
         /// <returns></returns>
-        protected bool GetRedDotEnable(RedDotInfo showInfo)
+        protected bool GetProdEnable(ProdInfo showInfo)
         {
-            return showInfo.status != RedDotStatus.Null;
+            return showInfo.status != ProdStatus.Null;
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="showInfo"></param>
         /// <returns></returns>
-        protected abstract string GetTextContent(RedDotInfo showInfo);
+        protected abstract string GetTextContent(ProdInfo showInfo);
 
         /// <summary>
         /// 注册
@@ -95,7 +95,7 @@ namespace JFrame.Common
             }
         }
 
-        protected abstract void DoRegist(string key, Action<string, RedDotInfo, string> action);
+        protected abstract void DoRegist(string key, Action<string, ProdInfo, string> action);
 
         /// <summary>
         /// 反注册
@@ -108,7 +108,7 @@ namespace JFrame.Common
             }
         }
 
-        protected abstract void DoUnRegist(string key, Action<string, RedDotInfo, string> onStatusUpdate);
+        protected abstract void DoUnRegist(string key, Action<string, ProdInfo, string> onStatusUpdate);
 
 
         /// <summary>
@@ -130,12 +130,12 @@ namespace JFrame.Common
         /// <param name="type"></param>
         /// <param name="info"></param>
         /// <param name="uid"></param>
-        protected virtual void OnStatusUpdate(string type, RedDotInfo info, string uid)
+        protected virtual void OnStatusUpdate(string type, ProdInfo info, string uid)
         {
-            img.gameObject.SetActive(GetRedDotEnable(info));
+            img.gameObject.SetActive(GetProdEnable(info));
             txt.text = GetTextContent(info);
             int iconIndex = GetSpriteIndex(info);
-            img.sprite = redDots[iconIndex];
+            img.sprite = prods[iconIndex];
         }
 
         private void OnDisable()

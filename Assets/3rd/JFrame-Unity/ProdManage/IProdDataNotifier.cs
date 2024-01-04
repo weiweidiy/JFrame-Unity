@@ -6,7 +6,7 @@ namespace JFrame.Common
     /// <summary>
     /// 数据变更通知器
     /// </summary>
-    public interface IRedDotDataNotifier<T>
+    public interface IProdDataNotifier<T>
     {
         event Action<T,object> onDataChanged;
 

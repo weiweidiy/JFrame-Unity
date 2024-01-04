@@ -4,32 +4,32 @@ using UnityEngine;
 
 namespace JFrame.Common
 {
-    public abstract class RedDotLogic<TData> : IObservable<RedDotInfo>
+    public abstract class ProdLogic<TData> : IObservable<ProdInfo>
     {
         /// <summary>
         /// 指定id的观察者
         /// </summary>
-        List<RedDotObserver> observers;
+        List<ProdObserver> observers;
 
         /// <summary>
         /// 不关心id的观察者
         /// </summary>
-        List<RedDotObserver> observersWithoutUID;
+        List<ProdObserver> observersWithoutUID;
 
         /// <summary>
         /// 红点数据
         /// </summary>
-        protected List<RedDotInfo> cachInfos;
+        protected List<ProdInfo> cachInfos;
 
         /// <summary>
         /// 数据更新通知器
         /// </summary>
-        IRedDotDataNotifier<TData> dataNotifier = null;
+        IProdDataNotifier<TData> dataNotifier = null;
 
-        public RedDotLogic()
+        public ProdLogic()
         {
-            observers = new List<RedDotObserver>();
-            observersWithoutUID = new List<RedDotObserver>();
+            observers = new List<ProdObserver>();
+            observersWithoutUID = new List<ProdObserver>();
 
             dataNotifier = GetDataNotifier();
             dataNotifier.Init();
@@ -39,10 +39,18 @@ namespace JFrame.Common
         }
 
         /// <summary>
+        /// 重置缓存数据
+        /// </summary>
+        public void ResetCacheInfos()
+        {
+            cachInfos = GetInfoList();
+        }
+
+        /// <summary>
         /// 获取数据变更通知器
         /// </summary>
         /// <returns></returns>
-        protected abstract IRedDotDataNotifier<TData> GetDataNotifier();
+        protected abstract IProdDataNotifier<TData> GetDataNotifier();
 
         /// <summary>
         /// 获取数据的唯一ID
@@ -56,20 +64,20 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected abstract RedDotStatus GetStatus(TData data);
+        protected abstract ProdStatus GetStatus(TData data);
 
         /// <summary>
-        /// 数据转换成reddotinfo，核心方法，就是最底层的 红点逻辑
+        /// 数据转换成prodinfo，核心方法，就是最底层的 红点逻辑
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual RedDotInfo GetCellNodeRedDotInfo(TData data)
+        protected virtual ProdInfo GetCellNodeProdInfo(TData data)
         {
             var status = GetStatus(data);
 
             var number = GetNumber(status);
 
-            RedDotInfo info = new RedDotInfo(GetUID(data), status, number);
+            ProdInfo info = new ProdInfo(GetUID(data), status, number);
 
             return info;
         }
@@ -80,18 +88,18 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="lstCacheInfo"></param>
         /// <returns></returns>
-        protected virtual RedDotInfo GetParentNodeRedDotInfo(List<RedDotInfo> lstCacheInfo)
+        protected virtual ProdInfo GetParentNodeProdInfo(List<ProdInfo> lstCacheInfo)
         {
-            RedDotInfo resultInfo = new RedDotInfo("", RedDotStatus.Null, 0);
+            ProdInfo resultInfo = new ProdInfo("", ProdStatus.Null, 0);
 
             //遍历红点状态，只要有一个是亮的，就通知亮，否则通知不亮
             for (int i = 0; i < lstCacheInfo.Count; i++)
             {
                 var cachInfo = lstCacheInfo[i];
 
-                if (cachInfo.status == RedDotStatus.Normal)
+                if (cachInfo.status == ProdStatus.Normal)
                 {
-                    resultInfo.status = RedDotStatus.Number;
+                    resultInfo.status = ProdStatus.Number;
                     resultInfo.number += cachInfo.number;
                 }
             }
@@ -104,9 +112,9 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="status"></param>
         /// <returns></returns>
-        protected virtual int GetNumber(RedDotStatus status)
+        protected virtual int GetNumber(ProdStatus status)
         {
-            return status == RedDotStatus.Null ? 0 : 1;
+            return status == ProdStatus.Null ? 0 : 1;
         }
 
         /// <summary>
@@ -123,7 +131,7 @@ namespace JFrame.Common
                 NotifyObserver(observer, info);
 
                 //更新不关注UID的观察者
-                var infoWithoutUID = GetParentNodeRedDotInfo(cachInfos);
+                var infoWithoutUID = GetParentNodeProdInfo(cachInfos);
                 NotifyObserversUninterestUID(infoWithoutUID);
             }
         }
@@ -134,9 +142,9 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual RedDotInfo UpdateInfo(TData data)
+        protected virtual ProdInfo UpdateInfo(TData data)
         {
-            RedDotInfo result = GetNewInfo(data);
+            ProdInfo result = GetNewInfo(data);
 
             bool needAdd = true;
             for (int i = 0; i < cachInfos.Count; i++)
@@ -144,7 +152,7 @@ namespace JFrame.Common
 
                 if (cachInfos[i].uid.Equals(GetUID(data)))
                 {
-                    result = GetCellNodeRedDotInfo(data);
+                    result = GetCellNodeProdInfo(data);
                     cachInfos[i] = result;
                     needAdd = false;
 
@@ -165,10 +173,10 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="newData"></param>
         /// <returns></returns>
-        protected virtual RedDotInfo GetNewInfo(TData newData)
+        protected virtual ProdInfo GetNewInfo(TData newData)
         {
             var status = GetStatus(newData);
-            RedDotInfo result = new RedDotInfo(GetUID(newData), status, GetNumber(status));
+            ProdInfo result = new ProdInfo(GetUID(newData), status, GetNumber(status));
             return result;
         }
 
@@ -190,37 +198,37 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="observer"></param>
         /// <returns></returns>
-        public IDisposable Subscribe(IObserver<RedDotInfo> observer)
+        public IDisposable Subscribe(IObserver<ProdInfo> observer)
         {
             //转换成实际的红点观察者
-            var redDotObserver = observer as RedDotObserver;
+            var prodObserver = observer as ProdObserver;
 
             //不关注ID的观察者
-            if (redDotObserver.UID.Equals(""))
+            if (prodObserver.UID.Equals(""))
             {
                 //加入列表
-                if (!observersWithoutUID.Contains(redDotObserver))
+                if (!observersWithoutUID.Contains(prodObserver))
                 {
-                    observersWithoutUID.Add(redDotObserver);
+                    observersWithoutUID.Add(prodObserver);
 
                     //把缓存数据通知给不关注ID的观察者
-                    RedDotInfo info = GetParentNodeRedDotInfo(cachInfos);
-                    NotifyObserver(redDotObserver, info);
+                    ProdInfo info = GetParentNodeProdInfo(cachInfos);
+                    NotifyObserver(prodObserver, info);
                 }
 
-                return new UnSubScriberRedDot(observersWithoutUID, redDotObserver);
+                return new UnSubScriberProd(observersWithoutUID, prodObserver);
             }
 
             //关注ID的观察者
-            if (!observers.Contains(redDotObserver))
+            if (!observers.Contains(prodObserver))
             {
-                observers.Add(redDotObserver);
+                observers.Add(prodObserver);
 
-                var info = GetInfoFromCache(redDotObserver.UID);
-                NotifyObserver(redDotObserver, info);
+                var info = GetInfoFromCache(prodObserver.UID);
+                NotifyObserver(prodObserver, info);
             }
 
-            return new UnSubScriberRedDot(observers, redDotObserver);
+            return new UnSubScriberProd(observers, prodObserver);
         }
 
         /// <summary>
@@ -228,7 +236,7 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="observer"></param>
         /// <param name="info"></param>
-        protected void NotifyObserver(RedDotObserver observer, RedDotInfo info)
+        protected void NotifyObserver(ProdObserver observer, ProdInfo info)
         {
             if (observer == null)
                 return;
@@ -240,7 +248,7 @@ namespace JFrame.Common
         /// 通知所有不关注UID的观察者，数据变更
         /// </summary>
         /// <param name="info"></param>
-        protected void NotifyObserversUninterestUID(RedDotInfo info)
+        protected void NotifyObserversUninterestUID(ProdInfo info)
         {
             foreach (var observer in observersWithoutUID)
             {
@@ -253,13 +261,13 @@ namespace JFrame.Common
         /// 获取数据，将原始数据按规则转换成红点数据
         /// </summary>
         /// <returns></returns>
-        protected List<RedDotInfo> GetInfoList()
+        protected List<ProdInfo> GetInfoList()
         {
-            var result = new List<RedDotInfo>();
+            var result = new List<ProdInfo>();
 
             foreach (var data in dataNotifier.GetDataList())
             {
-                result.Add(GetCellNodeRedDotInfo(data));
+                result.Add(GetCellNodeProdInfo(data));
             }
 
             return result;
@@ -270,7 +278,7 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="uid"></param>
         /// <returns></returns>
-        protected RedDotObserver GetObserverInterestUID(TData data)
+        protected ProdObserver GetObserverInterestUID(TData data)
         {
             return observers.Find((observer) => observer.EqualUid(GetUID(data)));
         }
@@ -280,7 +288,7 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="uid"></param>
         /// <returns></returns>
-        RedDotInfo GetInfoFromCache(string uid)
+        ProdInfo GetInfoFromCache(string uid)
         {
             for (int i = 0; i < cachInfos.Count; i++)
             {
@@ -290,7 +298,7 @@ namespace JFrame.Common
                     return info;
             }
 
-            return new RedDotInfo("", RedDotStatus.Null, 0);
+            return new ProdInfo("", ProdStatus.Null, 0);
         }
         #endregion
     }

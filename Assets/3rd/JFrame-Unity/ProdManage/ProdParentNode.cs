@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace JFrame.Common
 {
-    public abstract class RedDotParentNode : RedDotMono
+    public abstract class ProdParentNode : ProdMono
     {
         /// <summary>
         /// 是否强制隐藏数字
@@ -15,17 +15,17 @@ namespace JFrame.Common
         /// <summary>
         /// 所以关注事件的状态
         /// </summary>
-        protected Dictionary<string, RedDotInfo> dicInfo = new Dictionary<string, RedDotInfo>();
+        protected Dictionary<string, ProdInfo> dicInfo = new Dictionary<string, ProdInfo>();
 
         /// <summary>
         /// 注册事件
         /// </summary>
         /// <param name="key"></param>
         /// <param name="action"></param>
-        protected override void DoRegist(string key, Action<string, RedDotInfo, string> action)
+        protected override void DoRegist(string key, Action<string, ProdInfo, string> action)
         {
-            dicInfo.Add(key, new RedDotInfo("", RedDotStatus.Null, 0));
-            GetRedDotManager().Regist(key, OnStatusUpdate, "");
+            dicInfo.Add(key, new ProdInfo("", ProdStatus.Null, 0));
+            GetProdManager().Regist(key, OnStatusUpdate, "");
         }
 
         /// <summary>
@@ -33,9 +33,9 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="key"></param>
         /// <param name="onStatusUpdate"></param>
-        protected override void DoUnRegist(string key, Action<string, RedDotInfo, string> onStatusUpdate)
+        protected override void DoUnRegist(string key, Action<string, ProdInfo, string> onStatusUpdate)
         {
-            GetRedDotManager().UnRegist(key, OnStatusUpdate);
+            GetProdManager().UnRegist(key, OnStatusUpdate);
             dicInfo.Clear();
         }
 
@@ -58,9 +58,9 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="dicInfo"></param>
         /// <returns></returns>
-        protected virtual RedDotInfo MergeInfo(Dictionary<string, RedDotInfo> dicInfo)
+        protected virtual ProdInfo MergeInfo(Dictionary<string, ProdInfo> dicInfo)
         {
-            RedDotInfo result = new RedDotInfo();
+            ProdInfo result = new ProdInfo();
 
             int number = 0;
             foreach (var key in dicInfo.Keys)
@@ -68,7 +68,7 @@ namespace JFrame.Common
                 var info = dicInfo[key];
 
                 //只要有一个不为空，就跟着他显示
-                if (info.status != RedDotStatus.Null)
+                if (info.status != ProdStatus.Null)
                     result.status = info.status;
 
                 number += info.number;
@@ -85,7 +85,7 @@ namespace JFrame.Common
         /// <param name="type"></param>
         /// <param name="info"></param>
         /// <param name="uid"></param>
-        protected override void OnStatusUpdate(string type, RedDotInfo info, string uid)
+        protected override void OnStatusUpdate(string type, ProdInfo info, string uid)
         {
             //更新缓存数据
             dicInfo[type] = info;
@@ -104,9 +104,9 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="showInfo"></param>
         /// <returns></returns>
-        protected override string GetTextContent(RedDotInfo showInfo)
+        protected override string GetTextContent(ProdInfo showInfo)
         {
-            return showInfo.status == RedDotStatus.Number ? GetSumNumber().ToString() : "";
+            return showInfo.status == ProdStatus.Number ? GetSumNumber().ToString() : "";
         }
 
 
@@ -115,15 +115,15 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        protected override int GetSpriteIndex(RedDotInfo info)
+        protected override int GetSpriteIndex(ProdInfo info)
         {
             switch (info.status)
             {
-                case RedDotStatus.New:
+                case ProdStatus.New:
                     return 1;
-                case RedDotStatus.Full:
+                case ProdStatus.Full:
                     return 2;
-                case RedDotStatus.Ad:
+                case ProdStatus.Ad:
                     return 3;
                 default:
                     return 0;

@@ -2,12 +2,12 @@
 
 namespace JFrame.Common
 {
-    public class RedDotObserver : IObserver<RedDotInfo>
+    public class ProdObserver : IObserver<ProdInfo>
     {
         /// <summary>
         /// 实际的委托对象
         /// </summary>
-        Action<string, RedDotInfo, string> action;
+        Action<string, ProdInfo, string> action;
 
         /// <summary>
         /// 红点key
@@ -20,7 +20,7 @@ namespace JFrame.Common
         public string UID { get; private set; }
 
 
-        public RedDotObserver(string key, Action<string, RedDotInfo, string> action, string uid)
+        public ProdObserver(string key, Action<string, ProdInfo, string> action, string uid)
         {
             this.key = key;
             this.action = action;
@@ -32,7 +32,7 @@ namespace JFrame.Common
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public bool HasAction(Action<string, RedDotInfo, string> action)
+        public bool HasAction(Action<string, ProdInfo, string> action)
         {
             return this.action.Equals(action);
         }
@@ -55,7 +55,7 @@ namespace JFrame.Common
         {
         }
 
-        public void OnNext(RedDotInfo info)
+        public void OnNext(ProdInfo info)
         {
             action.Invoke(this.key,info, this.UID);
         }
